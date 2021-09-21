@@ -1,0 +1,23 @@
+.page {
+  font-family: "Inter", "Arial", sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  background-color: #000;
+  color: #FFF;
+}
+
+.page__header {
+  margin-top: 28px;
+}
+
+.page__main {
+  margin: 42px 0 48px;
+}
+
+.page__places {
+  margin-top: 36px;
+}
+
+.page__footer {
+  margin-bottom: 36px;
+}
