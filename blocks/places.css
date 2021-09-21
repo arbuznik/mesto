@@ -1,6 +1,21 @@
 .places {
   padding: 0 19px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   row-gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .places {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 17px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .places {
+    grid-template-columns: repeat(3, 282px);
+    column-gap: 17px;
+    padding: 0;
+  }
 }

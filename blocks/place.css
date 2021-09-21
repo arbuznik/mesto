@@ -54,3 +54,9 @@
   opacity: 1;
   background-image: url(../images/icon-like-button-active.svg);
 }
+
+@media (min-width: 1024px) {
+  .place {
+    width: 282px;
+  }
+}
