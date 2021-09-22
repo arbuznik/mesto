@@ -1,0 +1,14 @@
+.popup__container {
+  position: relative;
+  display: grid;
+  grid-template-rows: 20px 322px;
+  row-gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .popup__container {
+    grid-template-rows: 32px 330px;
+    grid-template-columns: 32px 430px 32px;
+    grid-gap: 8px;
+  }
+}

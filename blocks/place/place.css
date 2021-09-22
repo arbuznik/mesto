@@ -1,0 +1,10 @@
+.place {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .place {
+    width: 282px;
+  }
+}

@@ -1,0 +1,14 @@
+.form__input-container {
+  margin: 0 0 45px;
+  padding: 0;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+}
+
+@media (min-width: 1024px) {
+  .form__input-container {
+    margin-bottom: 48px;
+  }
+}
