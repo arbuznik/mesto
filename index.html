@@ -79,14 +79,17 @@
             <input type="text" class="form__input form__input_type_name" placeholder="Имя" required>
             <input type="text" class="form__input form__input form__input_type_job" placeholder="О себе" required>
           </fieldset>
+          <!-- type submit и eventListener submit сделаны по ТЗ. Однако в таком виде сразу после сабмита страница перезагружается, и измененные данные теряются. Все работает, если исправить тип кнопки на button и eventListner на click, т.к. не будет происходить перезагрузки-->
           <button type="submit" class="form__save-button">Сохранить</button>
         </form>
       </div>
     </section>
   </main>
+
   <footer class="footer page__footer">
     <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
   </footer>
+
   <script src="./blocks/popup/popup.js"></script>
 </body>
 </html>
