@@ -6,4 +6,4 @@
 
 ### Сайт
 
-https://arbuznik.github.io/mesto/
+<a href="https://arbuznik.github.io/mesto/" target="_blank">Посмотреть сайт</a>
