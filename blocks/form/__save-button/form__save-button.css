@@ -8,8 +8,19 @@
   border: none;
   transition: opacity 0.3s;
   cursor: pointer;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
 }
 
 .form__save-button:hover {
   opacity: 0.8;
+}
+
+@media (min-width: 1024px) {
+  .form__save-button {
+    font-size: 18px;
+    line-height: 22px;
+  }
 }
