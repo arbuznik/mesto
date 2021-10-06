@@ -1,0 +1,120 @@
+const userName = document.querySelector('.profile__title');
+const userJob = document.querySelector('.profile__subtitle');
+
+const popupEdit = document.querySelector('.edit_popup');
+const buttonEdit = document.querySelector('.profile__edit-button');
+const formProfile = document.querySelector('.form_profile');
+const inputUserName = document.querySelector('.form__input_type_name');
+const inputUserJob = document.querySelector('.form__input_type_job');
+
+const popupAdd = document.querySelector('.add_popup');
+const buttonAdd = document.querySelector('.profile__add-button');
+const formAdd = document.querySelector('.form_add');
+const inputPlace = document.querySelector('.form__input_type_place-name');
+const inputPlaceLink = document.querySelector('.form__input_type_place-link');
+
+const closeButtons = [...document.querySelectorAll('.popup__close-button')];
+
+const placesContainer = document.querySelector('.places');
+
+const initialCards = [
+  {
+    name: 'Бали',
+    link: './images/place-image-bali.jpg'
+  },
+  {
+    name: 'Канада',
+    link: './images/place-image-canada.jpg'
+  },
+  {
+    name: 'Дубай, Эмираты',
+    link: './images/place-image-dubai.jpg'
+  },
+  {
+    name: 'Япония',
+    link: './images/place-image-japan.jpg'
+  },
+  {
+    name: 'Норвегия',
+    link: './images/place-image-norway.jpg'
+  },
+  {
+    name: 'США',
+    link: './images/place-image-usa.jpg'
+  },
+];
+
+fillCardsOnPageLoad();
+
+buttonEdit.addEventListener('click', () => openPopup(popupEdit));
+buttonAdd.addEventListener('click', () => openPopup(popupAdd));
+closeButtons.map(button => button.addEventListener('click', () => closePopup(button.closest('.popup'))));
+formProfile.addEventListener('submit', handleProfileFormSubmit);
+formAdd.addEventListener('submit', handleAddFormSubmit);
+
+function fillCardsOnPageLoad() {
+  initialCards.map(card => addCard(card));
+}
+
+function addCard(card) {
+  const placeTemplate = document.querySelector('#place-template').content;
+  const placeElement = placeTemplate.querySelector('.place').cloneNode(true);
+
+  placeElement.querySelector('.place__title').textContent = card.name;
+  placeElement.querySelector('.place__cover').src = card.link;
+  placeElement.querySelector('.place__cover').alt = card.name;
+  placeElement.querySelector('.place__like-button').addEventListener('click', handleLikeClick)
+  placeElement.querySelector('.place__delete-button').addEventListener('click', handleDeleteClick)
+
+  placesContainer.prepend(placeElement);
+}
+
+function openPopup(popup) {
+  fillPopupInputs(popup);
+  popup.classList.add('popup_opened');
+  popup.querySelector('.form__input').focus();
+}
+
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+}
+
+function fillPopupInputs(popup) {
+  if (popup.classList.contains('edit_popup')) {
+  inputUserName.value = userName.textContent;
+  inputUserJob.value = userJob.textContent;
+  }
+  
+  if (popup.classList.contains('add_popup')) {
+    inputPlace.value = '';
+    inputPlaceLink.value = '';
+  }
+}
+
+function handleProfileFormSubmit(evt) {
+  evt.preventDefault();
+
+  userName.textContent = inputUserName.value;
+  userJob.textContent = inputUserJob.value;
+
+  closePopup(popupEdit);
+}
+
+function handleAddFormSubmit(evt) {
+  evt.preventDefault();
+  
+  const newCard = {};
+  newCard['name'] = inputPlace.value;
+  newCard['link'] = inputPlaceLink.value;
+  
+  addCard(newCard);
+  closePopup(popupAdd);
+}
+
+function handleLikeClick(evt) {
+  evt.target.classList.toggle('place__like-button_active');
+}
+
+function handleDeleteClick(evt) {
+  evt.target.closest('.place').remove();
+}
