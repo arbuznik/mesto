@@ -64,47 +64,40 @@ popupsAll.map(popup => popup.addEventListener('click', (evt) => {
 }));
 
 function fillCardsOnPageLoad() {
-  initialCards.map(card => addCard(card));
+  initialCards.map(card => addCard(placesContainer, createCard(card.name, card.link)));
 }
 
-function addCard(card) {
+function createCard(name, link) {
   const placeTemplate = document.querySelector('#place-template').content;
   const placeElement = placeTemplate.querySelector('.place').cloneNode(true);
 
-  placeElement.querySelector('.place__title').textContent = card.name;
-  placeElement.querySelector('.place__cover').src = card.link;
-  placeElement.querySelector('.place__cover').alt = card.name;
+  placeElement.querySelector('.place__title').textContent = name;
+  placeElement.querySelector('.place__cover').src = link;
+  placeElement.querySelector('.place__cover').alt = name;
   placeElement.querySelector('.place__cover').addEventListener('click', handleCoverClick);
   placeElement.querySelector('.place__like-button').addEventListener('click', handleLikeClick)
   placeElement.querySelector('.place__delete-button').addEventListener('click', handleDeleteClick)
 
-  placesContainer.prepend(placeElement);
+  return placeElement;
+}
+
+function addCard(container, placeElement) {
+  container.prepend(placeElement);
 }
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
   
-  fillPopupInputs(popup);
+  if (popup.classList.contains('popup_edit')) {
+    inputUserName.value = userName.textContent;
+    inputUserJob.value = userJob.textContent;
+  }
+
+  popup.querySelector('.form__input').focus();
 }
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
-}
-
-function fillPopupInputs(popup) {
-  if (popup.classList.contains('popup_edit')) {
-    inputUserName.value = userName.textContent;
-    inputUserJob.value = userJob.textContent;
-
-    inputUserName.focus();
-  }
-  
-  if (popup.classList.contains('popup_add')) {
-    inputPlace.value = '';
-    inputPlaceLink.value = '';
-
-    inputPlace.focus();
-  }
 }
 
 function handleProfileFormSubmit(evt) {
@@ -119,11 +112,10 @@ function handleProfileFormSubmit(evt) {
 function handleAddFormSubmit(evt) {
   evt.preventDefault();
   
-  const newCard = {};
-  newCard['name'] = inputPlace.value;
-  newCard['link'] = inputPlaceLink.value;
-  
-  addCard(newCard);
+  addCard(placesContainer, createCard(inputPlace.value, inputPlaceLink.value));
+
+  formAdd.reset();
+
   closePopup(popupAdd);
 }
 
