@@ -1,19 +1,22 @@
 const userName = document.querySelector('.profile__title');
 const userJob = document.querySelector('.profile__subtitle');
 
-const popupEdit = document.querySelector('.edit_popup');
+const popupEdit = document.querySelector('.popup_edit');
 const buttonEdit = document.querySelector('.profile__edit-button');
 const formProfile = document.querySelector('.form_profile');
 const inputUserName = document.querySelector('.form__input_type_name');
 const inputUserJob = document.querySelector('.form__input_type_job');
 
-const popupAdd = document.querySelector('.add_popup');
+const popupAdd = document.querySelector('.popup_add');
 const buttonAdd = document.querySelector('.profile__add-button');
 const formAdd = document.querySelector('.form_add');
 const inputPlace = document.querySelector('.form__input_type_place-name');
 const inputPlaceLink = document.querySelector('.form__input_type_place-link');
 
-const closeButtons = [...document.querySelectorAll('.popup__close-button')];
+const popupPhoto = document.querySelector('.popup_photo');
+
+const popupsAll = [...document.querySelectorAll('.popup')];
+const buttonsCloseAll = [...document.querySelectorAll('.popup__close-button')];
 
 const placesContainer = document.querySelector('.places');
 
@@ -48,9 +51,17 @@ fillCardsOnPageLoad();
 
 buttonEdit.addEventListener('click', () => openPopup(popupEdit));
 buttonAdd.addEventListener('click', () => openPopup(popupAdd));
-closeButtons.map(button => button.addEventListener('click', () => closePopup(button.closest('.popup'))));
+
 formProfile.addEventListener('submit', handleProfileFormSubmit);
 formAdd.addEventListener('submit', handleAddFormSubmit);
+
+buttonsCloseAll.map(button => button.addEventListener('click', () => closePopup(button.closest('.popup'))));
+
+popupsAll.map(popup => popup.addEventListener('click', (evt) => {
+  if (evt.target.classList.contains('popup')) {
+    closePopup(popup);
+  }
+}));
 
 function fillCardsOnPageLoad() {
   initialCards.map(card => addCard(card));
@@ -63,6 +74,7 @@ function addCard(card) {
   placeElement.querySelector('.place__title').textContent = card.name;
   placeElement.querySelector('.place__cover').src = card.link;
   placeElement.querySelector('.place__cover').alt = card.name;
+  placeElement.querySelector('.place__cover').addEventListener('click', handleCoverClick);
   placeElement.querySelector('.place__like-button').addEventListener('click', handleLikeClick)
   placeElement.querySelector('.place__delete-button').addEventListener('click', handleDeleteClick)
 
@@ -70,9 +82,9 @@ function addCard(card) {
 }
 
 function openPopup(popup) {
-  fillPopupInputs(popup);
   popup.classList.add('popup_opened');
-  popup.querySelector('.form__input').focus();
+  
+  fillPopupInputs(popup);
 }
 
 function closePopup(popup) {
@@ -80,14 +92,18 @@ function closePopup(popup) {
 }
 
 function fillPopupInputs(popup) {
-  if (popup.classList.contains('edit_popup')) {
-  inputUserName.value = userName.textContent;
-  inputUserJob.value = userJob.textContent;
+  if (popup.classList.contains('popup_edit')) {
+    inputUserName.value = userName.textContent;
+    inputUserJob.value = userJob.textContent;
+
+    inputUserName.focus();
   }
   
-  if (popup.classList.contains('add_popup')) {
+  if (popup.classList.contains('popup_add')) {
     inputPlace.value = '';
     inputPlaceLink.value = '';
+
+    inputPlace.focus();
   }
 }
 
@@ -117,4 +133,11 @@ function handleLikeClick(evt) {
 
 function handleDeleteClick(evt) {
   evt.target.closest('.place').remove();
+}
+
+function handleCoverClick(evt) {
+  openPopup(popupPhoto);
+
+  popupPhoto.querySelector('.popup__photo').src = evt.target.src;
+  popupPhoto.querySelector('.popup__photo-caption').textContent = evt.target.alt;
 }
