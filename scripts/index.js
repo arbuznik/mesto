@@ -49,8 +49,8 @@ const initialCards = [
 
 fillCardsOnPageLoad();
 
-buttonEdit.addEventListener('click', () => openPopup(popupEdit));
-buttonAdd.addEventListener('click', () => openPopup(popupAdd));
+buttonEdit.addEventListener('click', () => handlEditButtonClick(popupEdit));
+buttonAdd.addEventListener('click', () => handleAddButtonClick(popupAdd));
 
 formProfile.addEventListener('submit', handleProfileFormSubmit);
 formAdd.addEventListener('submit', handleAddFormSubmit);
@@ -75,8 +75,8 @@ function createCard(name, link) {
   placeElement.querySelector('.place__cover').src = link;
   placeElement.querySelector('.place__cover').alt = name;
   placeElement.querySelector('.place__cover').addEventListener('click', handleCoverClick);
-  placeElement.querySelector('.place__like-button').addEventListener('click', handleLikeClick)
-  placeElement.querySelector('.place__delete-button').addEventListener('click', handleDeleteClick)
+  placeElement.querySelector('.place__like-button').addEventListener('click', handleLikeClick);
+  placeElement.querySelector('.place__delete-button').addEventListener('click', handleDeleteClick);
 
   return placeElement;
 }
@@ -87,13 +87,6 @@ function addCard(container, placeElement) {
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
-  
-  if (popup.classList.contains('popup_edit')) {
-    inputUserName.value = userName.textContent;
-    inputUserJob.value = userJob.textContent;
-  }
-
-  popup.querySelector('.form__input').focus();
 }
 
 function closePopup(popup) {
@@ -132,4 +125,19 @@ function handleCoverClick(evt) {
 
   popupPhoto.querySelector('.popup__photo').src = evt.target.src;
   popupPhoto.querySelector('.popup__photo-caption').textContent = evt.target.alt;
+}
+
+function handlEditButtonClick(popup) {
+  openPopup(popup);
+
+  inputUserName.value = userName.textContent;
+  inputUserJob.value = userJob.textContent;
+
+  inputUserName.focus();
+}
+
+function handleAddButtonClick(popup) {
+  openPopup(popup);
+  
+  inputPlace.focus();
 }
