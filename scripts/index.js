@@ -53,6 +53,8 @@ fillCardsOnPageLoad();
 fillEditProfilePopup();
 enableFormValidation(forms);
 
+document.addEventListener('keydown', handleDocumentKeyboardEvents);
+
 buttonEdit.addEventListener('click', () => handlEditButtonClick(popupEdit));
 buttonAdd.addEventListener('click', () => handleAddButtonClick(popupAdd));
 
@@ -205,4 +207,13 @@ function toggleSubmitButtonState(inputs, submitButton) {
 
 function areAllInputsValid(inputs) {
   return inputs.every(input => input.validity.valid);
+}
+
+function handleDocumentKeyboardEvents(evt) {
+  if (evt.key === 'Escape') { 
+    const openedPopup = document.querySelector('.popup_opened');
+     if (openedPopup) {
+       closePopup(openedPopup);
+     }
+  }
 }
