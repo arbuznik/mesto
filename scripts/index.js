@@ -105,8 +105,6 @@ function closePopup(popup) {
 }
 
 function handleProfileFormSubmit(evt) {
-  evt.preventDefault();
-
   userName.textContent = inputUserName.value;
   userJob.textContent = inputUserJob.value;
 
@@ -114,8 +112,6 @@ function handleProfileFormSubmit(evt) {
 }
 
 function handleAddFormSubmit(evt) {
-  evt.preventDefault();
-  
   addCard(placesContainer, createCard(inputPlace.value, inputPlaceLink.value));
 
   formAdd.reset();
