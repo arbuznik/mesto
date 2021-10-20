@@ -37,12 +37,12 @@
   <div class="popup popup_edit">
     <div class="popup__container">
       <button type="button" class="popup__close-button" aria-label="Закрыть окно" title="Закрыть окно"></button>
-      <form action="#" class="form popup__form form_profile" name="popup-form" novalidate>
+      <form action="#" class="form popup__form form_profile" name="formEditProfile" novalidate>
         <h3 class="form__title">Редактировать профиль</h3>
         <fieldset class="form__input-container">
-          <input type="text" class="form__input form__input_type_name" id="user-name-input" name="user-name" placeholder="Имя" minlength="2" maxlength="40" required>
+          <input type="text" class="form__input form__input_type_name" id="user-name-input" name="userName" placeholder="Имя" minlength="2" maxlength="40" required>
           <span class="form__input-error user-name-input-error"></span>
-          <input type="text" class="form__input form__input_type_job" id="user-job-input" name="user-job" placeholder="О себе" minlength="2" maxlength="200" required>
+          <input type="text" class="form__input form__input_type_job" id="user-job-input" name="userJob" placeholder="О себе" minlength="2" maxlength="200" required>
           <span class="form__input-error user-job-input-error"></span>
         </fieldset>
         <button type="submit" class="form__save-button" aria-label="Сохранить" title="Сохранить">Сохранить</button>
@@ -53,12 +53,12 @@
   <div class="popup popup_add">
     <div class="popup__container">
       <button type="button" class="popup__close-button" aria-label="Закрыть окно" title="Закрыть окно"></button>
-      <form action="#" class="form popup__form form_add" name="popup-form" novalidate>
+      <form action="#" class="form popup__form form_add" name="formAddPlace" novalidate>
         <h3 class="form__title">Новое место</h3>
         <fieldset class="form__input-container">
-          <input type="text" class="form__input form__input_type_place-name" id="place-name-input" name="place-name" placeholder="Название" minlength="2" maxlength="30" required>
+          <input type="text" class="form__input form__input_type_place-name" id="place-name-input" name="placeName" placeholder="Название" minlength="2" maxlength="30" required>
           <span class="form__input-error place-name-input-error"></span>
-          <input type="url" class="form__input form__input_type_place-link" id="place-link-input" name="place-link" placeholder="Ссылка на картинку" required>
+          <input type="url" class="form__input form__input_type_place-link" id="place-link-input" name="placeLink" placeholder="Ссылка на картинку" required>
           <span class="form__input-error place-link-input-error"></span>
         </fieldset>
         <button type="submit" class="form__save-button" aria-label="Создать" title="Создать">Создать</button>

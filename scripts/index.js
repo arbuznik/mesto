@@ -3,20 +3,22 @@ const userJob = document.querySelector('.profile__subtitle');
 
 const popupEdit = document.querySelector('.popup_edit');
 const buttonEdit = document.querySelector('.profile__edit-button');
-const formProfile = document.querySelector('.form_profile');
-const inputUserName = document.querySelector('.form__input_type_name');
-const inputUserJob = document.querySelector('.form__input_type_job');
-
 const popupAdd = document.querySelector('.popup_add');
 const buttonAdd = document.querySelector('.profile__add-button');
-const formAdd = document.querySelector('.form_add');
-const inputPlace = document.querySelector('.form__input_type_place-name');
-const inputPlaceLink = document.querySelector('.form__input_type_place-link');
+
+const forms = Array.from(document.forms);
+const formProfile = document.forms.formEditProfile;
+const formAdd = document.forms.formAddPlace;
+
+const inputUserName = formProfile.elements.userName;
+const inputUserJob = formProfile.elements.userJob;
+const inputPlace = formAdd.elements.placeName;
+const inputPlaceLink = formAdd.elements.placeLink;
 
 const popupPhoto = document.querySelector('.popup_photo');
 
-const popupsAll = [...document.querySelectorAll('.popup')];
-const buttonsCloseAll = [...document.querySelectorAll('.popup__close-button')];
+const popupsAll = Array.from(document.querySelectorAll('.popup'));
+const buttonsCloseAll = Array.from(document.querySelectorAll('.popup__close-button'));
 
 const placesContainer = document.querySelector('.places');
 
@@ -48,7 +50,7 @@ const initialCards = [
 ];
 
 fillCardsOnPageLoad();
-enableFormValidation();
+enableFormValidation(forms);
 
 buttonEdit.addEventListener('click', () => handlEditButtonClick(popupEdit));
 buttonAdd.addEventListener('click', () => handleAddButtonClick(popupAdd));
@@ -143,9 +145,7 @@ function handleAddButtonClick(popup) {
   inputPlace.focus();
 }
 
-function enableFormValidation() {
-  const forms = Array.from(document.querySelectorAll('.form'));
-
+function enableFormValidation(forms) {
   forms.forEach(form => {
     form.addEventListener('submit', (evt) => {
       evt.preventDefault();
