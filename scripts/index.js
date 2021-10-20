@@ -50,6 +50,7 @@ const initialCards = [
 ];
 
 fillCardsOnPageLoad();
+fillEditProfilePopup();
 enableFormValidation(forms);
 
 buttonEdit.addEventListener('click', () => handlEditButtonClick(popupEdit));
@@ -82,6 +83,11 @@ function createCard(name, link) {
   placeElement.querySelector('.place__delete-button').addEventListener('click', handleDeleteClick);
 
   return placeElement;
+}
+
+function fillEditProfilePopup() {
+  inputUserName.value = userName.textContent;
+  inputUserJob.value = userJob.textContent;
 }
 
 function addCard(container, placeElement) {
@@ -132,9 +138,7 @@ function handleCoverClick(evt) {
 
 function handlEditButtonClick(popup) {
   openPopup(popup);
-
-  inputUserName.value = userName.textContent;
-  inputUserJob.value = userJob.textContent;
+  fillEditProfilePopup();
 
   inputUserName.focus();
 }
