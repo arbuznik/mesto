@@ -1,12 +1,3 @@
-const pageConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.form__input',
-  submitButtonSelector: '.form__save-button',
-  inactiveButtonClass: 'form__save-button_disabled',
-  inputErrorClass: 'form__input_error',
-  errorClass: 'form__input-error_active'
-};
-
 function enableFormValidation(pageConfig) {
   const forms = Array.from(document.querySelectorAll(pageConfig.formSelector));
 
@@ -15,49 +6,56 @@ function enableFormValidation(pageConfig) {
       evt.preventDefault();
     })
 
-    setEventListeners(form);
+    setEventListeners(form, pageConfig);
   })  
 }
 
-enableFormValidation(pageConfig);
+enableFormValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.form__input',
+  submitButtonSelector: '.form__save-button',
+  inactiveButtonClass: 'form__save-button_disabled',
+  inputErrorClass: 'form__input_error',
+  errorClass: 'form__input-error_active'
+});
 
-function setEventListeners(form) {
+function setEventListeners(form, pageConfig) {
   const formInputs = Array.from(form.querySelectorAll(pageConfig.inputSelector));
   const submitButton = form.querySelector(pageConfig.submitButtonSelector);
 
-  toggleSubmitButtonState(formInputs, submitButton);
+  toggleSubmitButtonState(formInputs, submitButton, pageConfig);
 
   formInputs.forEach(formInput => {
     formInput.addEventListener('input', () => {
-      isInputValid(form, formInput);
-      toggleSubmitButtonState(formInputs, submitButton);
+      isInputValid(form, formInput, pageConfig);
+      toggleSubmitButtonState(formInputs, submitButton, pageConfig);
     });
   })
 }
 
-function isInputValid(form, input) {
+function isInputValid(form, input, pageConfig) {
   if (!input.validity.valid) {
-    showInputError(form, input, input.validationMessage);
+    showInputError(form, input, input.validationMessage, pageConfig);
   } else {
-    hideInputError(form, input);
+    hideInputError(form, input, pageConfig);
   }
 }
 
-function showInputError(form, input, errorMessage) {
+function showInputError(form, input, errorMessage, pageConfig) {
   const inputError = form.querySelector(`.${input.id}-error`);
   input.classList.add(pageConfig.inputErrorClass);
   inputError.classList.add(pageConfig.errorClass);
   inputError.textContent = errorMessage;
 }
 
-function hideInputError(form, input) {
+function hideInputError(form, input, pageConfig) {
   const inputError = form.querySelector(`.${input.id}-error`);
   input.classList.remove(pageConfig.inputErrorClass);
   inputError.classList.remove(pageConfig.errorClass);
   inputError.textContent = '';
 }
 
-function toggleSubmitButtonState(inputs, submitButton) {
+function toggleSubmitButtonState(inputs, submitButton, pageConfig) {
   if (areAllInputsValid(inputs)) {
     submitButton.classList.remove(pageConfig.inactiveButtonClass);
   } else {

@@ -49,8 +49,6 @@ const initialCards = [
   },
 ];
 
-document.addEventListener('keydown', handleDocumentKeyboardEvents);
-
 buttonEdit.addEventListener('click', () => handlEditButtonClick(popupEdit));
 buttonAdd.addEventListener('click', () => handleAddButtonClick(popupAdd));
 
@@ -137,6 +135,8 @@ function handleCoverClick(evt) {
 function handlEditButtonClick(popup) {
   openPopup(popup);
   fillEditProfilePopup();
+
+  document.addEventListener('keydown', handleDocumentKeyboardEvents);
 
   inputUserName.focus();
 }
