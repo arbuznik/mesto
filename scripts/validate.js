@@ -1,5 +1,3 @@
-enableFormValidation(forms);
-
 function enableFormValidation(forms) {
   forms.forEach(form => {
     form.addEventListener('submit', (evt) => {
@@ -9,6 +7,8 @@ function enableFormValidation(forms) {
     setEventListeners(form);
   })
 }
+
+enableFormValidation(forms);
 
 function setEventListeners(form) {
   const formInputs = Array.from(form.querySelectorAll('.form__input'));

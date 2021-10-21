@@ -49,9 +49,6 @@ const initialCards = [
   },
 ];
 
-fillCardsOnPageLoad();
-fillEditProfilePopup();
-
 document.addEventListener('keydown', handleDocumentKeyboardEvents);
 
 buttonEdit.addEventListener('click', () => handlEditButtonClick(popupEdit));
@@ -72,6 +69,8 @@ function fillCardsOnPageLoad() {
   initialCards.map(card => addCard(placesContainer, createCard(card.name, card.link)));
 }
 
+fillCardsOnPageLoad();
+
 function createCard(name, link) {
   const placeTemplate = document.querySelector('#place-template').content;
   const placeElement = placeTemplate.querySelector('.place').cloneNode(true);
@@ -90,6 +89,8 @@ function fillEditProfilePopup() {
   inputUserName.value = userName.textContent;
   inputUserJob.value = userJob.textContent;
 }
+
+fillEditProfilePopup();
 
 function addCard(container, placeElement) {
   container.prepend(placeElement);
