@@ -128,10 +128,10 @@ function handleDeleteClick(evt) {
 }
 
 function handleCoverClick(evt) {
-  openPopup(popupPhoto);
-
   popupPhoto.querySelector('.popup__photo').src = evt.target.src;
   popupPhoto.querySelector('.popup__photo-caption').textContent = evt.target.alt;
+
+  openPopup(popupPhoto);
 }
 
 function handlEditButtonClick(popup) {
