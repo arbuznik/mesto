@@ -143,7 +143,7 @@ function handlEditButtonClick(popup) {
   toggleSubmitButtonState(formInputs, submitButton, pageConfig);
   
   openPopup(popup);
-  inputUserName.focus();
+  window.setTimeout(() => inputUserName.focus(), 200);
 }
 
 function handleAddButtonClick(popup) {
@@ -153,7 +153,7 @@ function handleAddButtonClick(popup) {
   toggleSubmitButtonState(formInputs, submitButton, pageConfig);
   
   openPopup(popup);
-  inputPlace.focus();
+  window.setTimeout(() => inputPlace.focus(), 200);
 }
 
 function handleDocumentKeyboardEvents(evt) {
