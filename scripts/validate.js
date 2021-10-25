@@ -1,3 +1,12 @@
+const pageConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.form__input',
+  submitButtonSelector: '.form__save-button',
+  inactiveButtonClass: 'form__save-button_disabled',
+  inputErrorClass: 'form__input_error',
+  errorClass: 'form__input-error_active'
+};
+
 function enableFormValidation(pageConfig) {
   const forms = Array.from(document.querySelectorAll(pageConfig.formSelector));
 
@@ -10,20 +19,11 @@ function enableFormValidation(pageConfig) {
   })  
 }
 
-enableFormValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.form__input',
-  submitButtonSelector: '.form__save-button',
-  inactiveButtonClass: 'form__save-button_disabled',
-  inputErrorClass: 'form__input_error',
-  errorClass: 'form__input-error_active'
-});
+enableFormValidation(pageConfig);
 
 function setEventListeners(form, pageConfig) {
   const formInputs = Array.from(form.querySelectorAll(pageConfig.inputSelector));
   const submitButton = form.querySelector(pageConfig.submitButtonSelector);
-
-  toggleSubmitButtonState(formInputs, submitButton, pageConfig);
 
   formInputs.forEach(formInput => {
     formInput.addEventListener('input', () => {

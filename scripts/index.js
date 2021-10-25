@@ -88,18 +88,20 @@ function fillEditProfilePopup() {
   inputUserJob.value = userJob.textContent;
 }
 
-fillEditProfilePopup();
-
 function addCard(container, placeElement) {
   container.prepend(placeElement);
 }
 
 function openPopup(popup) {
+  document.addEventListener('keydown', handleDocumentKeyboardEvents);
+
   popup.classList.add('popup_opened');
 }
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+
+  document.removeEventListener('keydown', handleDocumentKeyboardEvents);
 }
 
 function handleProfileFormSubmit(evt) {
@@ -136,13 +138,23 @@ function handlEditButtonClick(popup) {
   openPopup(popup);
   fillEditProfilePopup();
 
-  document.addEventListener('keydown', handleDocumentKeyboardEvents);
+  const formInputs = [inputUserName, inputUserJob];
+  const submitButton = formEditProfile.querySelector(pageConfig.submitButtonSelector);
+
+  toggleSubmitButtonState(formInputs, submitButton, pageConfig);
+
+  console.log(inputUserName.value)
 
   inputUserName.focus();
 }
 
 function handleAddButtonClick(popup) {
   openPopup(popup);
+
+  const formInputs = [inputPlace, inputPlaceLink];
+  const submitButton = formAddPlace.querySelector(pageConfig.submitButtonSelector);
+
+  toggleSubmitButtonState(formInputs, submitButton, pageConfig);
   
   inputPlace.focus();
 }
