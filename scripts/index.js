@@ -57,6 +57,8 @@ formAdd.addEventListener('submit', handleAddFormSubmit);
 
 buttonsCloseAll.map(button => button.addEventListener('click', () => closePopup(button.closest('.popup'))));
 
+placesContainer.addEventListener('click', handlePlaceClick);
+
 popupsAll.map(popup => popup.addEventListener('click', (evt) => {
   if (evt.target.classList.contains('popup')) {
     closePopup(popup);
@@ -76,9 +78,6 @@ function createCard(name, link) {
   placeElement.querySelector('.place__title').textContent = name;
   placeElement.querySelector('.place__cover').src = link;
   placeElement.querySelector('.place__cover').alt = name;
-  placeElement.querySelector('.place__cover').addEventListener('click', handleCoverClick);
-  placeElement.querySelector('.place__like-button').addEventListener('click', handleLikeClick);
-  placeElement.querySelector('.place__delete-button').addEventListener('click', handleDeleteClick);
 
   return placeElement;
 }
@@ -132,6 +131,20 @@ function handleCoverClick(evt) {
   popupPhoto.querySelector('.popup__photo-caption').textContent = evt.target.alt;
 
   openPopup(popupPhoto);
+}
+
+function handlePlaceClick(evt) {
+  if (evt.target.classList.contains('place__like-button')) {
+    handleLikeClick(evt);
+  }
+
+  if (evt.target.classList.contains('place__delete-button')) {
+    handleDeleteClick(evt);
+  }
+
+  if (evt.target.classList.contains('place__cover')) {
+    handleCoverClick(evt);
+  }
 }
 
 function handlEditButtonClick(popup) {
