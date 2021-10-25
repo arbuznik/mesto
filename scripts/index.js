@@ -135,27 +135,24 @@ function handleCoverClick(evt) {
 }
 
 function handlEditButtonClick(popup) {
-  openPopup(popup);
   fillEditProfilePopup();
 
   const formInputs = [inputUserName, inputUserJob];
   const submitButton = formEditProfile.querySelector(pageConfig.submitButtonSelector);
 
   toggleSubmitButtonState(formInputs, submitButton, pageConfig);
-
-  console.log(inputUserName.value)
-
+  
+  openPopup(popup);
   inputUserName.focus();
 }
 
 function handleAddButtonClick(popup) {
-  openPopup(popup);
-
   const formInputs = [inputPlace, inputPlaceLink];
   const submitButton = formAddPlace.querySelector(pageConfig.submitButtonSelector);
 
   toggleSubmitButtonState(formInputs, submitButton, pageConfig);
   
+  openPopup(popup);
   inputPlace.focus();
 }
 

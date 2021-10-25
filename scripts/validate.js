@@ -58,8 +58,10 @@ function hideInputError(form, input, pageConfig) {
 function toggleSubmitButtonState(inputs, submitButton, pageConfig) {
   if (areAllInputsValid(inputs)) {
     submitButton.classList.remove(pageConfig.inactiveButtonClass);
+    submitButton.disabled = false;
   } else {
     submitButton.classList.add(pageConfig.inactiveButtonClass);
+    submitButton.disabled = true;
   }
 }
 
