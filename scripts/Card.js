@@ -17,44 +17,44 @@ export class Card {
     return this._cardTemplate;
   }
 
-  handleLikeClick(evt) {
-    evt.target.classList.toggle('place__like-button_active');
+  handleLikeClick() {
+    this._placeElement.querySelector('.place__like-button').classList.toggle('place__like-button_active');
   }
 
-  handleDeleteClick(evt) {
-    evt.target.closest('.place').remove();
+  handleDeleteClick() {
+    this._placeElement.remove();
   }
 
-  handleCoverClick(evt) {
+  handleCoverClick() {
     this.popupPhoto = document.querySelector('.popup_photo');
-    this.popupPhoto.querySelector('.popup__photo').src = evt.target.src;
-    this.popupPhoto.querySelector('.popup__photo-caption').textContent = evt.target.alt;
+    this.popupPhoto.querySelector('.popup__photo').src = this._placeElement.querySelector('.place__cover').src;
+    this.popupPhoto.querySelector('.popup__photo-caption').textContent = this._placeElement.querySelector('.place__cover').alt;
 
     openPopup(this.popupPhoto);
   }
   
   _setEventListeners() {
-    this.placeElement.querySelector('.place__like-button').addEventListener('click', (evt) => {
-      this.handleLikeClick(evt);
+    this._placeElement.querySelector('.place__like-button').addEventListener('click', () => {
+      this.handleLikeClick();
     })
 
-    this.placeElement.querySelector('.place__delete-button').addEventListener('click', (evt) => {
-      this.handleDeleteClick(evt);
+    this._placeElement.querySelector('.place__delete-button').addEventListener('click', () => {
+      this.handleDeleteClick();
     })
 
-    this.placeElement.querySelector('.place__cover').addEventListener('click', (evt) => {
-      this.handleCoverClick(evt);
+    this._placeElement.querySelector('.place__cover').addEventListener('click', () => {
+      this.handleCoverClick();
     })
   }
 
   generateCard() {
-    this.placeElement = this._getTemplate();
+    this._placeElement = this._getTemplate();
     this._setEventListeners();
 
-    this.placeElement.querySelector('.place__title').textContent = this._name;
-    this.placeElement.querySelector('.place__cover').src = this._link;
-    this.placeElement.querySelector('.place__cover').alt = this._name;
+    this._placeElement.querySelector('.place__title').textContent = this._name;
+    this._placeElement.querySelector('.place__cover').src = this._link;
+    this._placeElement.querySelector('.place__cover').alt = this._name;
 
-    return this.placeElement;
+    return this._placeElement;
   }
 }
