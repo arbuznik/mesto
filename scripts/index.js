@@ -1,3 +1,5 @@
+import { Card } from './Card.js';
+
 const userName = document.querySelector('.profile__title');
 const userJob = document.querySelector('.profile__subtitle');
 
@@ -15,14 +17,12 @@ const inputUserJob = formProfile.elements.userJob;
 const inputPlace = formAdd.elements.placeName;
 const inputPlaceLink = formAdd.elements.placeLink;
 
-const popupPhoto = document.querySelector('.popup_photo');
-
 const popupsAll = Array.from(document.querySelectorAll('.popup'));
 const buttonsCloseAll = Array.from(document.querySelectorAll('.popup__close-button'));
 
 const placesContainer = document.querySelector('.places');
 
-const initialCards = [
+const initialCardsContent = [
   {
     name: 'Бали',
     link: './images/place-image-bali.jpg'
@@ -55,43 +55,38 @@ buttonAdd.addEventListener('click', () => handleAddButtonClick(popupAdd));
 formProfile.addEventListener('submit', handleProfileFormSubmit);
 formAdd.addEventListener('submit', handleAddFormSubmit);
 
-buttonsCloseAll.map(button => button.addEventListener('click', () => closePopup(button.closest('.popup'))));
+buttonsCloseAll.forEach(button => button.addEventListener('click', () => closePopup(button.closest('.popup'))));
 
-placesContainer.addEventListener('click', handlePlaceClick);
-
-popupsAll.map(popup => popup.addEventListener('click', (evt) => {
+popupsAll.forEach(popup => popup.addEventListener('click', (evt) => {
   if (evt.target.classList.contains('popup')) {
     closePopup(popup);
   }
 }));
 
+function createCardElement(cardContent) {
+  const card = new Card(cardContent, '#place-template');
+  return card.generateCard();
+}
+
 function fillCardsOnPageLoad() {
-  initialCards.map(card => addCard(placesContainer, createCard(card.name, card.link)));
+  initialCardsContent.forEach(cardContent => {
+    const cardElement = createCardElement(cardContent);
+    renderCard(placesContainer, cardElement);
+  });
 }
 
 fillCardsOnPageLoad();
-
-function createCard(name, link) {
-  const placeTemplate = document.querySelector('#place-template').content;
-  const placeElement = placeTemplate.querySelector('.place').cloneNode(true);
-
-  placeElement.querySelector('.place__title').textContent = name;
-  placeElement.querySelector('.place__cover').src = link;
-  placeElement.querySelector('.place__cover').alt = name;
-
-  return placeElement;
-}
 
 function fillEditProfilePopup() {
   inputUserName.value = userName.textContent;
   inputUserJob.value = userJob.textContent;
 }
 
-function addCard(container, placeElement) {
-  container.prepend(placeElement);
+function renderCard(container, cardElement) {
+  container.prepend(cardElement);
 }
 
-function openPopup(popup) {
+export function openPopup(popup) {
   document.addEventListener('keydown', handleDocumentKeyboardEvents);
 
   popup.classList.add('popup_opened');
@@ -103,48 +98,21 @@ function closePopup(popup) {
   document.removeEventListener('keydown', handleDocumentKeyboardEvents);
 }
 
-function handleProfileFormSubmit(evt) {
+function handleProfileFormSubmit() {
   userName.textContent = inputUserName.value;
   userJob.textContent = inputUserJob.value;
 
   closePopup(popupEdit);
 }
 
-function handleAddFormSubmit(evt) {
-  addCard(placesContainer, createCard(inputPlace.value, inputPlaceLink.value));
+function handleAddFormSubmit() {
+  const cardContent = { name: inputPlace.value, link: inputPlaceLink.value };
+  const cardElement = createCardElement(cardContent);
+  renderCard(placesContainer, cardElement);
 
   formAdd.reset();
 
   closePopup(popupAdd);
-}
-
-function handleLikeClick(evt) {
-  evt.target.classList.toggle('place__like-button_active');
-}
-
-function handleDeleteClick(evt) {
-  evt.target.closest('.place').remove();
-}
-
-function handleCoverClick(evt) {
-  popupPhoto.querySelector('.popup__photo').src = evt.target.src;
-  popupPhoto.querySelector('.popup__photo-caption').textContent = evt.target.alt;
-
-  openPopup(popupPhoto);
-}
-
-function handlePlaceClick(evt) {
-  if (evt.target.classList.contains('place__like-button')) {
-    handleLikeClick(evt);
-  }
-
-  if (evt.target.classList.contains('place__delete-button')) {
-    handleDeleteClick(evt);
-  }
-
-  if (evt.target.classList.contains('place__cover')) {
-    handleCoverClick(evt);
-  }
 }
 
 function handlEditButtonClick(popup) {
