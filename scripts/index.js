@@ -1,4 +1,5 @@
 import { Card } from './Card.js';
+import { FormValidator } from './FormValidator.js';
 
 const userName = document.querySelector('.profile__title');
 const userJob = document.querySelector('.profile__subtitle');
@@ -57,6 +58,7 @@ formAdd.addEventListener('submit', handleAddFormSubmit);
 
 buttonsCloseAll.forEach(button => button.addEventListener('click', () => closePopup(button.closest('.popup'))));
 
+// overlay click listener
 popupsAll.forEach(popup => popup.addEventListener('click', (evt) => {
   if (evt.target.classList.contains('popup')) {
     closePopup(popup);
@@ -68,6 +70,10 @@ function createCardElement(cardContent) {
   return card.generateCard();
 }
 
+function renderCard(container, cardElement) {
+  container.prepend(cardElement);
+}
+
 function fillCardsOnPageLoad() {
   initialCardsContent.forEach(cardContent => {
     const cardElement = createCardElement(cardContent);
@@ -75,15 +81,9 @@ function fillCardsOnPageLoad() {
   });
 }
 
-fillCardsOnPageLoad();
-
 function fillEditProfilePopup() {
   inputUserName.value = userName.textContent;
   inputUserJob.value = userJob.textContent;
-}
-
-function renderCard(container, cardElement) {
-  container.prepend(cardElement);
 }
 
 export function openPopup(popup) {
@@ -117,21 +117,15 @@ function handleAddFormSubmit() {
 
 function handlEditButtonClick(popup) {
   fillEditProfilePopup();
-
-  const formInputs = [inputUserName, inputUserJob];
-  const submitButton = formEditProfile.querySelector(pageConfig.submitButtonSelector);
-
-  toggleSubmitButtonState(formInputs, submitButton, pageConfig);
   
   openPopup(popup);
   window.setTimeout(() => inputUserName.focus(), 200);
 }
 
 function handleAddButtonClick(popup) {
-  const formInputs = [inputPlace, inputPlaceLink];
-  const submitButton = formAddPlace.querySelector(pageConfig.submitButtonSelector);
-
-  toggleSubmitButtonState(formInputs, submitButton, pageConfig);
+  const submitButton = formAddPlace.querySelector('.form__save-button');
+  submitButton.classList.add('form__save-button_disabled');
+  submitButton.disabled = true;
   
   openPopup(popup);
   window.setTimeout(() => inputPlace.focus(), 200);
@@ -145,3 +139,23 @@ function handleDocumentKeyboardEvents(evt) {
      }
   }
 }
+
+function enableFormsValidation() {
+  const data = {
+    formSelector: '.popup__form',
+    inputSelector: '.form__input',
+    submitButtonSelector: '.form__save-button',
+    inactiveButtonClass: 'form__save-button_disabled',
+    inputErrorClass: 'form__input_error',
+    errorClass: 'form__input-error_active',
+  };
+
+  forms.forEach(formElement => {
+    const form = new FormValidator(data, formElement);
+    form.enableValidation();
+  });
+}
+
+fillCardsOnPageLoad();
+
+enableFormsValidation();

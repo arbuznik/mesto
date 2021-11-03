@@ -17,15 +17,15 @@ export class Card {
     return this._cardTemplate;
   }
 
-  handleLikeClick() {
+  _handleLikeClick() {
     this._placeElement.querySelector('.place__like-button').classList.toggle('place__like-button_active');
   }
 
-  handleDeleteClick() {
+  _handleDeleteClick() {
     this._placeElement.remove();
   }
 
-  handleCoverClick() {
+  _handleCoverClick() {
     this.popupPhoto = document.querySelector('.popup_photo');
     this.popupPhoto.querySelector('.popup__photo').src = this._placeElement.querySelector('.place__cover').src;
     this.popupPhoto.querySelector('.popup__photo-caption').textContent = this._placeElement.querySelector('.place__cover').alt;
@@ -35,15 +35,15 @@ export class Card {
   
   _setEventListeners() {
     this._placeElement.querySelector('.place__like-button').addEventListener('click', () => {
-      this.handleLikeClick();
+      this._handleLikeClick();
     })
 
     this._placeElement.querySelector('.place__delete-button').addEventListener('click', () => {
-      this.handleDeleteClick();
+      this._handleDeleteClick();
     })
 
     this._placeElement.querySelector('.place__cover').addEventListener('click', () => {
-      this.handleCoverClick();
+      this._handleCoverClick();
     })
   }
 
