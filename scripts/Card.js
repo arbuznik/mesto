@@ -5,6 +5,23 @@ export class Card {
     this._name = data.name;
     this._link = data.link;
     this._templateSelector = templateSelector;
+
+    this._placeElement = this._getTemplate();
+
+    this._buttonLike = this._placeElement.querySelector('.place__like-button');
+    this._buttonDelete = this._placeElement.querySelector('.place__delete-button');
+    this._placeCover = this._placeElement.querySelector('.place__cover');
+    this._placeTitle = this._placeElement.querySelector('.place__title');
+
+    this._placeTitle.textContent = this._name;
+    this._placeCover.src = this._link;
+    this._placeCover.alt = this._name;
+
+    this.photoPopup = document.querySelector('.popup_photo');
+    this.popupCover = document.querySelector('.popup__photo');
+    this.popupCaption = document.querySelector('.popup__photo-caption');
+
+    this._setEventListeners();
   }
 
   _getTemplate() {
@@ -18,7 +35,7 @@ export class Card {
   }
 
   _handleLikeClick() {
-    this._placeElement.querySelector('.place__like-button').classList.toggle('place__like-button_active');
+    this._buttonLike.classList.toggle('place__like-button_active');
   }
 
   _handleDeleteClick() {
@@ -26,35 +43,28 @@ export class Card {
   }
 
   _handleCoverClick() {
-    this.popupPhoto = document.querySelector('.popup_photo');
-    this.popupPhoto.querySelector('.popup__photo').src = this._placeElement.querySelector('.place__cover').src;
-    this.popupPhoto.querySelector('.popup__photo-caption').textContent = this._placeElement.querySelector('.place__cover').alt;
+    this.popupCover.src = this._link;
+    this.popupCover.alt = this._name;
+    this.popupCaption.textContent = this._name;
 
-    openPopup(this.popupPhoto);
+    openPopup(this.photoPopup);
   }
   
   _setEventListeners() {
-    this._placeElement.querySelector('.place__like-button').addEventListener('click', () => {
+    this._buttonLike.addEventListener('click', () => {
       this._handleLikeClick();
     })
 
-    this._placeElement.querySelector('.place__delete-button').addEventListener('click', () => {
+    this._buttonDelete.addEventListener('click', () => {
       this._handleDeleteClick();
     })
 
-    this._placeElement.querySelector('.place__cover').addEventListener('click', () => {
+    this._placeCover.addEventListener('click', () => {
       this._handleCoverClick();
     })
   }
 
   generateCard() {
-    this._placeElement = this._getTemplate();
-    this._setEventListeners();
-
-    this._placeElement.querySelector('.place__title').textContent = this._name;
-    this._placeElement.querySelector('.place__cover').src = this._link;
-    this._placeElement.querySelector('.place__cover').alt = this._name;
-
     return this._placeElement;
   }
 }

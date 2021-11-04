@@ -13,13 +13,28 @@ const forms = Array.from(document.forms);
 const formProfile = document.forms.formEditProfile;
 const formAdd = document.forms.formAddPlace;
 
+const data = {
+  formSelector: '.popup__form',
+  inputSelector: '.form__input',
+  submitButtonSelector: '.form__save-button',
+  inactiveButtonClass: 'form__save-button_disabled',
+  inputErrorClass: 'form__input_error',
+  errorClass: 'form__input-error_active',
+};
+
+const validationOfFormAdd = new FormValidator(data, formAdd);
+const validationOfFormProfile = new FormValidator(data, formProfile);
+
+validationOfFormAdd.enableValidation();
+validationOfFormProfile.enableValidation();
+
 const inputUserName = formProfile.elements.userName;
 const inputUserJob = formProfile.elements.userJob;
 const inputPlace = formAdd.elements.placeName;
 const inputPlaceLink = formAdd.elements.placeLink;
 
-const popupsAll = Array.from(document.querySelectorAll('.popup'));
-const buttonsCloseAll = Array.from(document.querySelectorAll('.popup__close-button'));
+const allPopups = Array.from(document.querySelectorAll('.popup'));
+const allCloseButtons = Array.from(document.querySelectorAll('.popup__close-button'));
 
 const placesContainer = document.querySelector('.places');
 
@@ -56,10 +71,10 @@ buttonAdd.addEventListener('click', () => handleAddButtonClick(popupAdd));
 formProfile.addEventListener('submit', handleProfileFormSubmit);
 formAdd.addEventListener('submit', handleAddFormSubmit);
 
-buttonsCloseAll.forEach(button => button.addEventListener('click', () => closePopup(button.closest('.popup'))));
+allCloseButtons.forEach(button => button.addEventListener('click', () => closePopup(button.closest('.popup'))));
 
 // overlay click listener
-popupsAll.forEach(popup => popup.addEventListener('click', (evt) => {
+allPopups.forEach(popup => popup.addEventListener('click', (evt) => {
   if (evt.target.classList.contains('popup')) {
     closePopup(popup);
   }
@@ -117,15 +132,14 @@ function handleAddFormSubmit() {
 
 function handlEditButtonClick(popup) {
   fillEditProfilePopup();
+  validationOfFormProfile.resetValidation();  
   
   openPopup(popup);
   window.setTimeout(() => inputUserName.focus(), 200);
 }
 
 function handleAddButtonClick(popup) {
-  const submitButton = formAddPlace.querySelector('.form__save-button');
-  submitButton.classList.add('form__save-button_disabled');
-  submitButton.disabled = true;
+  validationOfFormAdd.resetValidation();
   
   openPopup(popup);
   window.setTimeout(() => inputPlace.focus(), 200);
@@ -140,22 +154,4 @@ function handleDocumentKeyboardEvents(evt) {
   }
 }
 
-function enableFormsValidation() {
-  const data = {
-    formSelector: '.popup__form',
-    inputSelector: '.form__input',
-    submitButtonSelector: '.form__save-button',
-    inactiveButtonClass: 'form__save-button_disabled',
-    inputErrorClass: 'form__input_error',
-    errorClass: 'form__input-error_active',
-  };
-
-  forms.forEach(formElement => {
-    const form = new FormValidator(data, formElement);
-    form.enableValidation();
-  });
-}
-
 fillCardsOnPageLoad();
-
-enableFormsValidation();
