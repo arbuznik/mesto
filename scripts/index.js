@@ -1,11 +1,13 @@
-import { Card } from './Card.js';
-import { FormValidator } from './FormValidator.js';
+import Card from './Card.js';
+import FormValidator from './FormValidator.js';
 import Popup from './Popup.js';
+import PopupWithImage from './PopupWithImage.js';
 import Section from './Section.js';
 
 const cardsContainerSelector = '.places';
 const popupAddSelector = '.popup_add';
 const popupEditSelector = '.popup_edit';
+const popupPhotoSelector = '.popup_photo';
 
 const userName = document.querySelector('.profile__title');
 const userJob = document.querySelector('.profile__subtitle');
@@ -71,7 +73,12 @@ const initialCardsContent = [
 const cardsList = new Section({
   items: initialCardsContent,
   renderer: (item) => {
-    const card = new Card(item, '#place-template');
+    const card = new Card(
+      item,
+      '#place-template',
+      (name, link) => {
+        newPopupImage.open(name, link);
+      });
     const cardElement = card.generateCard();
     cardsList.addItem(cardElement);
   }}, cardsContainerSelector)
@@ -84,16 +91,14 @@ newPopupAdd.setEventListeners();
 const newPopupEdit = new Popup(popupEditSelector);
 newPopupEdit.setEventListeners();
 
+const newPopupImage = new PopupWithImage(popupPhotoSelector);
+newPopupImage.setEventListeners();
 
 buttonEdit.addEventListener('click', () => handlEditButtonClick(popupEdit));
 buttonAdd.addEventListener('click', () => handleAddButtonClick(popupAdd));
 
 formProfile.addEventListener('submit', handleProfileFormSubmit);
 formAdd.addEventListener('submit', handleAddFormSubmit);
-
-function renderCard(container, cardElement) {
-  container.prepend(cardElement);
-}
 
 function fillEditProfilePopup() {
   inputUserName.value = userName.textContent;
