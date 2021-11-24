@@ -1,6 +1,11 @@
 import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
+import Popup from './Popup.js';
 import Section from './Section.js';
+
+const cardsContainerSelector = '.places';
+const popupAddSelector = '.popup_add';
+const popupEditSelector = '.popup_edit';
 
 const userName = document.querySelector('.profile__title');
 const userJob = document.querySelector('.profile__subtitle');
@@ -33,9 +38,6 @@ const inputUserName = formProfile.elements.userName;
 const inputUserJob = formProfile.elements.userJob;
 const inputPlace = formAdd.elements.placeName;
 const inputPlaceLink = formAdd.elements.placeLink;
-
-const allPopups = Array.from(document.querySelectorAll('.popup'));
-const allCloseButtons = Array.from(document.querySelectorAll('.popup__close-button'));
 
 const placesContainer = document.querySelector('.places');
 
@@ -72,9 +74,15 @@ const cardsList = new Section({
     const card = new Card(item, '#place-template');
     const cardElement = card.generateCard();
     cardsList.addItem(cardElement);
-  }}, '.places')
+  }}, cardsContainerSelector)
 
-  cardsList.renderItems();
+cardsList.renderItems();
+
+const newPopupAdd = new Popup(popupAddSelector);
+newPopupAdd.setEventListeners();
+
+const newPopupEdit = new Popup(popupEditSelector);
+newPopupEdit.setEventListeners();
 
 
 buttonEdit.addEventListener('click', () => handlEditButtonClick(popupEdit));
@@ -82,15 +90,6 @@ buttonAdd.addEventListener('click', () => handleAddButtonClick(popupAdd));
 
 formProfile.addEventListener('submit', handleProfileFormSubmit);
 formAdd.addEventListener('submit', handleAddFormSubmit);
-
-allCloseButtons.forEach(button => button.addEventListener('click', () => closePopup(button.closest('.popup'))));
-
-// overlay click listener
-allPopups.forEach(popup => popup.addEventListener('click', (evt) => {
-  if (evt.target.classList.contains('popup')) {
-    closePopup(popup);
-  }
-}));
 
 function renderCard(container, cardElement) {
   container.prepend(cardElement);
@@ -101,23 +100,11 @@ function fillEditProfilePopup() {
   inputUserJob.value = userJob.textContent;
 }
 
-export function openPopup(popup) {
-  document.addEventListener('keydown', handleDocumentKeyboardEvents);
-
-  popup.classList.add('popup_opened');
-}
-
-function closePopup(popup) {
-  popup.classList.remove('popup_opened');
-
-  document.removeEventListener('keydown', handleDocumentKeyboardEvents);
-}
-
 function handleProfileFormSubmit() {
   userName.textContent = inputUserName.value;
   userJob.textContent = inputUserJob.value;
 
-  closePopup(popupEdit);
+  newPopupEdit.close();
 }
 
 function handleAddFormSubmit() {
@@ -127,29 +114,20 @@ function handleAddFormSubmit() {
 
   formAdd.reset();
 
-  closePopup(popupAdd);
+  newPopupAdd.close();
 }
 
-function handlEditButtonClick(popup) {
+function handlEditButtonClick() {
   fillEditProfilePopup();
   validationOfFormProfile.resetValidation();  
   
-  openPopup(popup);
+  newPopupEdit.open();
   window.setTimeout(() => inputUserName.focus(), 200);
 }
 
-function handleAddButtonClick(popup) {
+function handleAddButtonClick() {
   validationOfFormAdd.resetValidation();
   
-  openPopup(popup);
+  newPopupAdd.open();
   window.setTimeout(() => inputPlace.focus(), 200);
-}
-
-function handleDocumentKeyboardEvents(evt) {
-  if (evt.key === 'Escape') { 
-    const openedPopup = document.querySelector('.popup_opened');
-     if (openedPopup) {
-       closePopup(openedPopup);
-     }
-  }
 }
