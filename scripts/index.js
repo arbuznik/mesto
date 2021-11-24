@@ -1,5 +1,6 @@
 import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
+import Section from './Section.js';
 
 const userName = document.querySelector('.profile__title');
 const userJob = document.querySelector('.profile__subtitle');
@@ -65,6 +66,17 @@ const initialCardsContent = [
   },
 ];
 
+const cardsList = new Section({
+  items: initialCardsContent,
+  renderer: (item) => {
+    const card = new Card(item, '#place-template');
+    const cardElement = card.generateCard();
+    cardsList.addItem(cardElement);
+  }}, '.places')
+
+  cardsList.renderItems();
+
+
 buttonEdit.addEventListener('click', () => handlEditButtonClick(popupEdit));
 buttonAdd.addEventListener('click', () => handleAddButtonClick(popupAdd));
 
@@ -80,20 +92,8 @@ allPopups.forEach(popup => popup.addEventListener('click', (evt) => {
   }
 }));
 
-function createCardElement(cardContent) {
-  const card = new Card(cardContent, '#place-template');
-  return card.generateCard();
-}
-
 function renderCard(container, cardElement) {
   container.prepend(cardElement);
-}
-
-function fillCardsOnPageLoad() {
-  initialCardsContent.forEach(cardContent => {
-    const cardElement = createCardElement(cardContent);
-    renderCard(placesContainer, cardElement);
-  });
 }
 
 function fillEditProfilePopup() {
@@ -153,5 +153,3 @@ function handleDocumentKeyboardEvents(evt) {
      }
   }
 }
-
-fillCardsOnPageLoad();

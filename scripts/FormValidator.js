@@ -57,12 +57,12 @@ export class FormValidator {
 
   _areAllInputsValid() {
       return this._formInputs.every(input => input.validity.valid);
-    }
+  }
 
   resetValidation() {
     this._toggleSubmitButtonState();
 
-    this._formInputs.forEach((formInput) => {
+    this._formInputs.forEach(formInput => {
       this._hideInputError(formInput);
     });
   }
