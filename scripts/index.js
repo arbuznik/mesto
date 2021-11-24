@@ -1,6 +1,6 @@
 import Card from './Card.js';
 import FormValidator from './FormValidator.js';
-import Popup from './Popup.js';
+import PopupWithForm from './PopupWithForm.js';
 import PopupWithImage from './PopupWithImage.js';
 import Section from './Section.js';
 
@@ -21,6 +21,10 @@ const forms = Array.from(document.forms);
 const formProfile = document.forms.formEditProfile;
 const formAdd = document.forms.formAddPlace;
 
+const inputUserName = formProfile.elements.userName;
+const inputUserJob = formProfile.elements.userJob;
+const inputPlace = formAdd.elements.name;
+
 const data = {
   formSelector: '.popup__form',
   inputSelector: '.form__input',
@@ -29,19 +33,6 @@ const data = {
   inputErrorClass: 'form__input_error',
   errorClass: 'form__input-error_active',
 };
-
-const validationOfFormAdd = new FormValidator(data, formAdd);
-const validationOfFormProfile = new FormValidator(data, formProfile);
-
-validationOfFormAdd.enableValidation();
-validationOfFormProfile.enableValidation();
-
-const inputUserName = formProfile.elements.userName;
-const inputUserJob = formProfile.elements.userJob;
-const inputPlace = formAdd.elements.placeName;
-const inputPlaceLink = formAdd.elements.placeLink;
-
-const placesContainer = document.querySelector('.places');
 
 const initialCardsContent = [
   {
@@ -70,6 +61,12 @@ const initialCardsContent = [
   },
 ];
 
+const validationOfFormAdd = new FormValidator(data, formAdd);
+const validationOfFormProfile = new FormValidator(data, formProfile);
+
+validationOfFormAdd.enableValidation();
+validationOfFormProfile.enableValidation();
+
 const cardsList = new Section({
   items: initialCardsContent,
   renderer: (item) => {
@@ -85,10 +82,32 @@ const cardsList = new Section({
 
 cardsList.renderItems();
 
-const newPopupAdd = new Popup(popupAddSelector);
+const newPopupAdd = new PopupWithForm(
+  popupAddSelector,
+  (item) => {
+    const card = new Card(
+      item,
+      '#place-template',
+      (name, link) => {
+        newPopupImage.open(name, link);
+      });
+    const cardElement = card.generateCard();
+    cardsList.addItem(cardElement);
+
+    newPopupAdd.close();
+  });
+
 newPopupAdd.setEventListeners();
 
-const newPopupEdit = new Popup(popupEditSelector);
+const newPopupEdit = new PopupWithForm(
+  popupEditSelector,
+  (userData) => {
+    userName.textContent = userData.userName;
+    userJob.textContent = userData.userJob;
+
+    newPopupEdit.close();
+  });
+
 newPopupEdit.setEventListeners();
 
 const newPopupImage = new PopupWithImage(popupPhotoSelector);
@@ -97,29 +116,9 @@ newPopupImage.setEventListeners();
 buttonEdit.addEventListener('click', () => handlEditButtonClick(popupEdit));
 buttonAdd.addEventListener('click', () => handleAddButtonClick(popupAdd));
 
-formProfile.addEventListener('submit', handleProfileFormSubmit);
-formAdd.addEventListener('submit', handleAddFormSubmit);
-
 function fillEditProfilePopup() {
   inputUserName.value = userName.textContent;
   inputUserJob.value = userJob.textContent;
-}
-
-function handleProfileFormSubmit() {
-  userName.textContent = inputUserName.value;
-  userJob.textContent = inputUserJob.value;
-
-  newPopupEdit.close();
-}
-
-function handleAddFormSubmit() {
-  const cardContent = { name: inputPlace.value, link: inputPlaceLink.value };
-  const cardElement = createCardElement(cardContent);
-  renderCard(placesContainer, cardElement);
-
-  formAdd.reset();
-
-  newPopupAdd.close();
 }
 
 function handlEditButtonClick() {
