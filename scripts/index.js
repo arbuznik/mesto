@@ -62,7 +62,10 @@ const initialCardsContent = [
 buttonEditElement.addEventListener('click', () => handleEditButtonClick(popupEditElement));
 buttonAddElement.addEventListener('click', () => handleAddButtonClick(popupAddElelement));
 
-const userInfo = new UserInfo('.profile__title', '.profile__subtitle');
+const userInfo = new UserInfo({
+  nameSelector: '.profile__title',
+  aboutSelector: '.profile__subtitle'
+});
 
 userInfo.setUserInfo({
   userName: 'Haskell Brooks Curry',
@@ -130,12 +133,12 @@ function handleEditButtonClick() {
   validationOfFormProfile.resetValidation();  
   
   popupEdit.open();
-  window.setTimeout(() => inputUserName.focus(), 200);
+  window.setTimeout(() => inputUserName.focus(), 300);
 }
 
 function handleAddButtonClick() {
   validationOfFormAdd.resetValidation();
   
   popupAdd.open();
-  window.setTimeout(() => inputPlace.focus(), 200);
+  window.setTimeout(() => inputPlace.focus(), 300);
 }
