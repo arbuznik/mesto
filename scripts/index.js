@@ -3,26 +3,24 @@ import FormValidator from './FormValidator.js';
 import PopupWithForm from './PopupWithForm.js';
 import PopupWithImage from './PopupWithImage.js';
 import Section from './Section.js';
+import UserInfo from './UserInfo.js';
 
 const cardsContainerSelector = '.places';
 const popupAddSelector = '.popup_add';
 const popupEditSelector = '.popup_edit';
 const popupPhotoSelector = '.popup_photo';
 
-const userName = document.querySelector('.profile__title');
-const userJob = document.querySelector('.profile__subtitle');
-
-const popupEdit = document.querySelector('.popup_edit');
-const buttonEdit = document.querySelector('.profile__edit-button');
-const popupAdd = document.querySelector('.popup_add');
-const buttonAdd = document.querySelector('.profile__add-button');
+const popupEditElement = document.querySelector('.popup_edit');
+const buttonEditElement = document.querySelector('.profile__edit-button');
+const popupAddElelement = document.querySelector('.popup_add');
+const buttonAddElement = document.querySelector('.profile__add-button');
 
 const forms = Array.from(document.forms);
 const formProfile = document.forms.formEditProfile;
 const formAdd = document.forms.formAddPlace;
 
 const inputUserName = formProfile.elements.userName;
-const inputUserJob = formProfile.elements.userJob;
+const inputUserJob = formProfile.elements.aboutUser;
 const inputPlace = formAdd.elements.name;
 
 const data = {
@@ -61,10 +59,20 @@ const initialCardsContent = [
   },
 ];
 
-const validationOfFormAdd = new FormValidator(data, formAdd);
-const validationOfFormProfile = new FormValidator(data, formProfile);
+buttonEditElement.addEventListener('click', () => handleEditButtonClick(popupEditElement));
+buttonAddElement.addEventListener('click', () => handleAddButtonClick(popupAddElelement));
 
+const userInfo = new UserInfo('.profile__title', '.profile__subtitle');
+
+userInfo.setUserInfo({
+  userName: 'Haskell Brooks Curry',
+  aboutUser: 'Eсть язык программирования на каждое из моих имён!'
+})
+
+const validationOfFormAdd = new FormValidator(data, formAdd);
 validationOfFormAdd.enableValidation();
+
+const validationOfFormProfile = new FormValidator(data, formProfile);
 validationOfFormProfile.enableValidation();
 
 const cardsList = new Section({
@@ -82,9 +90,9 @@ const cardsList = new Section({
 
 cardsList.renderItems();
 
-const newPopupAdd = new PopupWithForm(
-  popupAddSelector,
-  (item) => {
+const popupAdd = new PopupWithForm({
+  popupSelector: popupAddSelector,
+  handleFormSubmit: (item) => {
     const card = new Card(
       item,
       '#place-template',
@@ -94,44 +102,40 @@ const newPopupAdd = new PopupWithForm(
     const cardElement = card.generateCard();
     cardsList.addItem(cardElement);
 
-    newPopupAdd.close();
-  });
+    popupAdd.close();
+  }});
 
-newPopupAdd.setEventListeners();
+popupAdd.setEventListeners();
 
-const newPopupEdit = new PopupWithForm(
-  popupEditSelector,
-  (userData) => {
-    userName.textContent = userData.userName;
-    userJob.textContent = userData.userJob;
+const popupEdit = new PopupWithForm({
+  popupSelector: popupEditSelector,
+  handleFormSubmit: (userData) => {
+    userInfo.setUserInfo(userData);
+    popupEdit.close();
+  }});
 
-    newPopupEdit.close();
-  });
-
-newPopupEdit.setEventListeners();
+popupEdit.setEventListeners();
 
 const newPopupImage = new PopupWithImage(popupPhotoSelector);
 newPopupImage.setEventListeners();
 
-buttonEdit.addEventListener('click', () => handlEditButtonClick(popupEdit));
-buttonAdd.addEventListener('click', () => handleAddButtonClick(popupAdd));
-
 function fillEditProfilePopup() {
-  inputUserName.value = userName.textContent;
-  inputUserJob.value = userJob.textContent;
+  const { userName, aboutUser } = userInfo.getUserInfo();
+  inputUserName.value = userName;
+  inputUserJob.value = aboutUser;
 }
 
-function handlEditButtonClick() {
+function handleEditButtonClick() {
   fillEditProfilePopup();
   validationOfFormProfile.resetValidation();  
   
-  newPopupEdit.open();
+  popupEdit.open();
   window.setTimeout(() => inputUserName.focus(), 200);
 }
 
 function handleAddButtonClick() {
   validationOfFormAdd.resetValidation();
   
-  newPopupAdd.open();
+  popupAdd.open();
   window.setTimeout(() => inputPlace.focus(), 200);
 }
