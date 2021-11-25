@@ -1,9 +1,18 @@
-import Card from './Card.js';
-import FormValidator from './FormValidator.js';
-import PopupWithForm from './PopupWithForm.js';
-import PopupWithImage from './PopupWithImage.js';
-import Section from './Section.js';
-import UserInfo from './UserInfo.js';
+import './index.css';
+
+import Card from '../components/Card.js';
+import FormValidator from '../components/FormValidator.js';
+import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithImage from '../components/PopupWithImage.js';
+import Section from '../components/Section.js';
+import UserInfo from '../components/UserInfo.js';
+
+import baliImage from '../images/place-image-bali.jpg';
+import canadaImage from '../images/place-image-canada.jpg';
+import dubaiImage from '../images/place-image-dubai.jpg';
+import japanImage from '../images/place-image-japan.jpg';
+import norwayImage from '../images/place-image-norway.jpg';
+import usaImage from '../images/place-image-usa.jpg';
 
 const cardsContainerSelector = '.places';
 const popupAddSelector = '.popup_add';
@@ -35,27 +44,27 @@ const data = {
 const initialCardsContent = [
   {
     name: 'Бали',
-    link: './images/place-image-bali.jpg'
+    link: baliImage,
   },
   {
     name: 'Канада',
-    link: './images/place-image-canada.jpg'
+    link: canadaImage,
   },
   {
     name: 'Дубай, Эмираты',
-    link: './images/place-image-dubai.jpg'
+    link: dubaiImage,
   },
   {
     name: 'Япония',
-    link: './images/place-image-japan.jpg'
+    link: japanImage,
   },
   {
     name: 'Норвегия',
-    link: './images/place-image-norway.jpg'
+    link: norwayImage,
   },
   {
     name: 'США',
-    link: './images/place-image-usa.jpg'
+    link: usaImage,
   },
 ];
 
