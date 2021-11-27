@@ -7,66 +7,7 @@ import PopupWithImage from '../components/PopupWithImage.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 
-import baliImage from '../images/place-image-bali.jpg';
-import canadaImage from '../images/place-image-canada.jpg';
-import dubaiImage from '../images/place-image-dubai.jpg';
-import japanImage from '../images/place-image-japan.jpg';
-import norwayImage from '../images/place-image-norway.jpg';
-import usaImage from '../images/place-image-usa.jpg';
-
-const cardsContainerSelector = '.places';
-const popupAddSelector = '.popup_add';
-const popupEditSelector = '.popup_edit';
-const popupPhotoSelector = '.popup_photo';
-
-const popupEditElement = document.querySelector('.popup_edit');
-const buttonEditElement = document.querySelector('.profile__edit-button');
-const popupAddElelement = document.querySelector('.popup_add');
-const buttonAddElement = document.querySelector('.profile__add-button');
-
-const forms = Array.from(document.forms);
-const formProfile = document.forms.formEditProfile;
-const formAdd = document.forms.formAddPlace;
-
-const inputUserName = formProfile.elements.userName;
-const inputUserJob = formProfile.elements.aboutUser;
-const inputPlace = formAdd.elements.name;
-
-const data = {
-  formSelector: '.popup__form',
-  inputSelector: '.form__input',
-  submitButtonSelector: '.form__save-button',
-  inactiveButtonClass: 'form__save-button_disabled',
-  inputErrorClass: 'form__input_error',
-  errorClass: 'form__input-error_active',
-};
-
-const initialCardsContent = [
-  {
-    name: 'Бали',
-    link: baliImage,
-  },
-  {
-    name: 'Канада',
-    link: canadaImage,
-  },
-  {
-    name: 'Дубай, Эмираты',
-    link: dubaiImage,
-  },
-  {
-    name: 'Япония',
-    link: japanImage,
-  },
-  {
-    name: 'Норвегия',
-    link: norwayImage,
-  },
-  {
-    name: 'США',
-    link: usaImage,
-  },
-];
+import { cardsContainerSelector, popupAddSelector, popupEditSelector, popupPhotoSelector, popupEditElement, buttonEditElement, popupAddElelement, buttonAddElement, formProfile, formAdd, inputUserName, inputUserJob, inputPlace, data, initialCardsContent } from '../utils/constants.js';
 
 buttonEditElement.addEventListener('click', () => handleEditButtonClick(popupEditElement));
 buttonAddElement.addEventListener('click', () => handleAddButtonClick(popupAddElelement));
@@ -76,11 +17,6 @@ const userInfo = new UserInfo({
   aboutSelector: '.profile__subtitle'
 });
 
-userInfo.setUserInfo({
-  userName: 'Haskell Brooks Curry',
-  aboutUser: 'Eсть язык программирования на каждое из моих имён!'
-})
-
 const validationOfFormAdd = new FormValidator(data, formAdd);
 validationOfFormAdd.enableValidation();
 
@@ -89,14 +25,8 @@ validationOfFormProfile.enableValidation();
 
 const cardsList = new Section({
   items: initialCardsContent,
-  renderer: (item) => {
-    const card = new Card(
-      item,
-      '#place-template',
-      (name, link) => {
-        newPopupImage.open(name, link);
-      });
-    const cardElement = card.generateCard();
+  renderer: (cardContent) => {
+    const cardElement = createCardElement(cardContent);
     cardsList.addItem(cardElement);
   }}, cardsContainerSelector)
 
@@ -104,14 +34,8 @@ cardsList.renderItems();
 
 const popupAdd = new PopupWithForm({
   popupSelector: popupAddSelector,
-  handleFormSubmit: (item) => {
-    const card = new Card(
-      item,
-      '#place-template',
-      (name, link) => {
-        newPopupImage.open(name, link);
-      });
-    const cardElement = card.generateCard();
+  handleFormSubmit: (cardContent) => {
+    const cardElement = createCardElement(cardContent);
     cardsList.addItem(cardElement);
 
     popupAdd.close();
@@ -150,4 +74,15 @@ function handleAddButtonClick() {
   
   popupAdd.open();
   window.setTimeout(() => inputPlace.focus(), 300);
+}
+
+function createCardElement(cardContent) {
+  const card = new Card(
+    cardContent,
+    '#place-template',
+    (name, link) => {
+      newPopupImage.open(name, link);
+    });
+
+  return card.generateCard();
 }
