@@ -33,29 +33,29 @@ export const data = {
   errorClass: 'form__input-error_active',
 };
 
-export const initialCardsContent = [
-  {
-    name: 'Бали',
-    link: baliImage,
-  },
-  {
-    name: 'Канада',
-    link: canadaImage,
-  },
-  {
-    name: 'Дубай, Эмираты',
-    link: dubaiImage,
-  },
-  {
-    name: 'Япония',
-    link: japanImage,
-  },
-  {
-    name: 'Норвегия',
-    link: norwayImage,
-  },
-  {
-    name: 'США',
-    link: usaImage,
-  },
-];
+// export const initialCardsContent = [
+//   {
+//     name: 'Бали',
+//     link: baliImage,
+//   },
+//   {
+//     name: 'Канада',
+//     link: canadaImage,
+//   },
+//   {
+//     name: 'Дубай, Эмираты',
+//     link: dubaiImage,
+//   },
+//   {
+//     name: 'Япония',
+//     link: japanImage,
+//   },
+//   {
+//     name: 'Норвегия',
+//     link: norwayImage,
+//   },
+//   {
+//     name: 'США',
+//     link: usaImage,
+//   },
+// ];

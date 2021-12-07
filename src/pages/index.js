@@ -9,7 +9,7 @@ import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 
-import { cardsContainerSelector, popupAddSelector, popupEditSelector, popupPhotoSelector, popupEditElement, buttonEditElement, popupAddElelement, buttonAddElement, formProfile, formAdd, inputUserName, inputUserJob, inputPlace, data, initialCardsContent, popupConfirmationSelector } from '../utils/constants.js';
+import { cardsContainerSelector, popupAddSelector, popupEditSelector, popupPhotoSelector, popupEditElement, buttonEditElement, popupAddElelement, buttonAddElement, formProfile, formAdd, inputUserName, inputUserJob, inputPlace, data, popupConfirmationSelector } from '../utils/constants.js';
 
 buttonEditElement.addEventListener('click', () => handleEditButtonClick(popupEditElement));
 buttonAddElement.addEventListener('click', () => handleAddButtonClick(popupAddElelement));
@@ -38,20 +38,34 @@ api.getUserInfo()
   .then(result => userInfo.setUserInfo(result))
   .catch(err => console.log(err));
 
+api.getInitialCards()
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    }
+
+    return Promise.reject(`Ошибка: ${res.status}`);
+  })
+  .then(result => renderInitialCards(result))
+  .catch(err => console.log(err));
+
+const cardsList = new Section({
+  renderer: (cardContent) => {
+    const cardElement = createCardElement(cardContent);
+    cardsList.addItem(cardElement);
+  },
+  containerSelector: cardsContainerSelector
+});
+
+function renderInitialCards(cardsContent) {
+  cardsList.renderItems(cardsContent);
+}
+
 const validationOfFormAdd = new FormValidator(data, formAdd);
 validationOfFormAdd.enableValidation();
 
 const validationOfFormProfile = new FormValidator(data, formProfile);
 validationOfFormProfile.enableValidation();
-
-const cardsList = new Section({
-  items: initialCardsContent,
-  renderer: (cardContent) => {
-    const cardElement = createCardElement(cardContent);
-    cardsList.addItem(cardElement);
-  }}, cardsContainerSelector)
-
-cardsList.renderItems();
 
 const popupAdd = new PopupWithForm({
   popupSelector: popupAddSelector,
