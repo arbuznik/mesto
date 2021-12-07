@@ -1,5 +1,5 @@
 export default class Card {
-  constructor({ name, link }, templateSelector, handleCardClick) {
+  constructor({ name, link, likes }, templateSelector, handleCardClick) {
     this._name = name;
     this._link = link;
     this._templateSelector = templateSelector;
@@ -11,10 +11,12 @@ export default class Card {
     this._buttonDelete = this._placeElement.querySelector('.place__delete-button');
     this._placeCover = this._placeElement.querySelector('.place__cover');
     this._placeTitle = this._placeElement.querySelector('.place__title');
+    this._placeLikeCounter = this._placeElement.querySelector('.place__like-counter');
 
     this._placeTitle.textContent = this._name;
     this._placeCover.src = this._link;
     this._placeCover.alt = this._name;
+    this._placeLikeCounter.textContent = likes.length;
 
     this._setEventListeners();
   }

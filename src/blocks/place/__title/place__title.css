@@ -1,5 +1,7 @@
 .place__title {
+  grid-row: 1 / span 2;
   margin: 0 20px 0 0;
+  align-self: center;
   font-style: normal;
   font-weight: 900;
   font-size: 24px;
