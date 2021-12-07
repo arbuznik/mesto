@@ -4,10 +4,6 @@ export default class Api {
     this._headers = headers;
   }
 
-  getInitialCards() {
-    // ...
-  }
-
   getUserInfo() {
     return fetch(this._url + '/users/me', {
       headers: this._headers
@@ -17,6 +13,14 @@ export default class Api {
   getInitialCards() {
     return fetch(this._url + '/cards', {
       headers: this._headers
+    })
+  }
+
+  editUserInfo(userInfo) {
+    return fetch(this._url + '/users/me', {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify(userInfo)
     })
   }
 }

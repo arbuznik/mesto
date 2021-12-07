@@ -27,27 +27,21 @@ const userInfo = new UserInfo({
   aboutSelector: '.profile__subtitle'
 });
 
+function handleApiResponse(response) {
+  if (response.ok) {
+    return response.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+}
+
+function handleApiError(err) {
+  console.log(err);
+}
+
 api.getUserInfo()
-  .then(response => {
-    if (response.ok) {
-      return response.json();
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
+  .then(handleApiResponse)
   .then(result => userInfo.setUserInfo(result))
-  .catch(err => console.log(err));
-
-api.getInitialCards()
-  .then(response => {
-    if (response.ok) {
-      return response.json();
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
-  .then(result => renderInitialCards(result))
-  .catch(err => console.log(err));
+  .catch(handleApiError);
 
 const cardsList = new Section({
   renderer: (cardContent) => {
@@ -56,6 +50,11 @@ const cardsList = new Section({
   },
   containerSelector: cardsContainerSelector
 });
+
+api.getInitialCards()
+  .then(handleApiResponse)
+  .then(result => renderInitialCards(result))
+  .catch(handleApiError);
 
 function renderInitialCards(cardsContent) {
   cardsList.renderItems(cardsContent);
@@ -81,8 +80,13 @@ popupAdd.setEventListeners();
 const popupEdit = new PopupWithForm({
   popupSelector: popupEditSelector,
   handleFormSubmit: (userData) => {
-    userInfo.setUserInfo(userData);
-    popupEdit.close();
+    api.editUserInfo(userData)
+      .then(handleApiResponse)
+      .then(result => {
+        userInfo.setUserInfo(result);
+        popupEdit.close();
+      })
+      .catch(handleApiError);
   }});
 
 popupEdit.setEventListeners();
