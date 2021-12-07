@@ -9,6 +9,7 @@ export const cardsContainerSelector = '.places';
 export const popupAddSelector = '.popup_add';
 export const popupEditSelector = '.popup_edit';
 export const popupPhotoSelector = '.popup_photo';
+export const popupConfirmationSelector = '.popup_delete';
 
 export const popupEditElement = document.querySelector('.popup_edit');
 export const buttonEditElement = document.querySelector('.profile__edit-button');
@@ -19,8 +20,8 @@ export const forms = Array.from(document.forms);
 export const formProfile = document.forms.formEditProfile;
 export const formAdd = document.forms.formAddPlace;
 
-export const inputUserName = formProfile.elements.userName;
-export const inputUserJob = formProfile.elements.aboutUser;
+export const inputUserName = formProfile.elements.name;
+export const inputUserJob = formProfile.elements.about;
 export const inputPlace = formAdd.elements.name;
 
 export const data = {
