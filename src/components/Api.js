@@ -23,4 +23,12 @@ export default class Api {
       body: JSON.stringify(userInfo)
     })
   }
+
+  addNewCard(cardContent) {
+    return fetch(this._url + '/cards', {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify(cardContent)
+    })
+  }
 }

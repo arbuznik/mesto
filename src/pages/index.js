@@ -69,10 +69,14 @@ validationOfFormProfile.enableValidation();
 const popupAdd = new PopupWithForm({
   popupSelector: popupAddSelector,
   handleFormSubmit: (cardContent) => {
-    const cardElement = createCardElement(cardContent);
-    cardsList.addItem(cardElement);
-
-    popupAdd.close();
+    api.addNewCard(cardContent)
+      .then(handleApiResponse)
+      .then(result => {
+        const cardElement = createCardElement(result);
+        cardsList.addItem(cardElement);
+        popupAdd.close();
+      })
+      .catch(handleApiError);
   }});
 
 popupAdd.setEventListeners();
