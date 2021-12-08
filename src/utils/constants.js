@@ -17,6 +17,8 @@ export const inputUserName = formProfile.elements.name;
 export const inputUserJob = formProfile.elements.about;
 export const inputPlace = formAdd.elements.name;
 
+export const userId = '764fef4607b228a9bcef2ef1';
+
 export const data = {
   formSelector: '.popup__form',
   inputSelector: '.form__input',

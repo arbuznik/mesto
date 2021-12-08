@@ -38,4 +38,18 @@ export default class Api {
       headers: this._headers
     })
   }
+
+  addCardLike(cardId) {
+    return fetch(this._url + '/cards/' + cardId + '/likes', {
+      method: 'PUT',
+      headers: this._headers
+    })
+  }
+
+  removeCardLike(cardId) {
+    return fetch(this._url + '/cards/' + cardId + '/likes', {
+      method: 'DELETE',
+      headers: this._headers
+    })
+  }
 }

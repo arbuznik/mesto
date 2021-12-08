@@ -9,7 +9,7 @@ import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 
-import { cardsContainerSelector, popupAddSelector, popupEditSelector, popupPhotoSelector, popupEditElement, buttonEditElement, popupAddElelement, buttonAddElement, formProfile, formAdd, inputUserName, inputUserJob, inputPlace, data, popupConfirmationSelector } from '../utils/constants.js';
+import { cardsContainerSelector, popupAddSelector, popupEditSelector, popupPhotoSelector, popupEditElement, buttonEditElement, popupAddElelement, buttonAddElement, formProfile, formAdd, inputUserName, inputUserJob, inputPlace, data, popupConfirmationSelector, userId } from '../utils/constants.js';
 
 buttonEditElement.addEventListener('click', () => handleEditButtonClick(popupEditElement));
 buttonAddElement.addEventListener('click', () => handleAddButtonClick(popupAddElelement));
@@ -134,16 +134,34 @@ function handleAddButtonClick() {
 }
 
 function createCardElement(cardContent) {
-  const card = new Card(
-    cardContent,
-    '#place-template',
-    (name, link) => {
+  const card = new Card({
+    cardContent: cardContent,
+    templateSelector: '#place-template',
+    userId: userId,
+    handleCardClick: (name, link) => {
       popupImage.open(name, link);
     },
-    (cardId) => {
+    handleDeleteClick: (cardId) => {
       popupDeleteConfirmation.open()
       popupDeleteConfirmation.setCardId(cardId);
-    });
+    },
+    handleLikeClick: (cardId, isLiked) => {
+      if (isLiked) {
+        api.removeCardLike(cardId)
+          .then(handleApiResponse)
+          .then(cardContent => {
+            card.updateLikes(cardContent.likes)
+          })
+          .catch(handleApiError);
+      } else {
+        api.addCardLike(cardId)
+          .then(handleApiResponse)
+          .then(cardContent => {
+            card.updateLikes(cardContent.likes)
+      })
+          .catch(handleApiError);
+      }
+    }});
 
   return card.generateCard();
 }
