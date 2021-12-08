@@ -31,4 +31,11 @@ export default class Api {
       body: JSON.stringify(cardContent)
     })
   }
+
+  deleteCard(cardId) {
+    return fetch(this._url + '/cards/' + cardId, {
+      method: 'DELETE',
+      headers: this._headers
+    })
+  }
 }

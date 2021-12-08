@@ -98,8 +98,19 @@ popupEdit.setEventListeners();
 const popupImage = new PopupWithImage(popupPhotoSelector);
 popupImage.setEventListeners();
 
-const popupConfirmation = new PopupWithConfirmation(popupConfirmationSelector);
-popupConfirmation.setEventListeners();
+const popupDeleteConfirmation = new PopupWithConfirmation({
+  popupSelector: popupConfirmationSelector,
+  handleConfirmation: (cardId) => {
+    api.deleteCard(cardId)
+      .then(handleApiResponse)
+      .then(() => {
+        document.getElementById(cardId).remove();
+        popupDeleteConfirmation.close();
+      })
+      .catch(handleApiError);
+  }});
+
+popupDeleteConfirmation.setEventListeners();
 
 function fillEditProfilePopup() {
   const { name, about } = userInfo.getUserInfo();
@@ -128,6 +139,10 @@ function createCardElement(cardContent) {
     '#place-template',
     (name, link) => {
       popupImage.open(name, link);
+    },
+    (cardId) => {
+      popupDeleteConfirmation.open()
+      popupDeleteConfirmation.setCardId(cardId);
     });
 
   return card.generateCard();
