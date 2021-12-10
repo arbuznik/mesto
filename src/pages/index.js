@@ -9,10 +9,11 @@ import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 
-import { cardsContainerSelector, popupAddSelector, popupEditSelector, popupPhotoSelector, popupEditElement, buttonEditElement, popupAddElelement, buttonAddElement, formProfile, formAdd, inputUserName, inputUserJob, inputPlace, data, popupConfirmationSelector, userId } from '../utils/constants.js';
+import { cardsContainerSelector, popupAddSelector, popupEditSelector, popupPhotoSelector, buttonEditElement, buttonAddElement, formProfile, formAdd, inputUserName, inputUserJob, inputPlace, data, popupConfirmationSelector, buttonEditAvatarElement, popupEditAvatarSelector, formEditAvatar, inputAvatarUrl } from '../utils/constants.js';
 
-buttonEditElement.addEventListener('click', () => handleEditButtonClick(popupEditElement));
-buttonAddElement.addEventListener('click', () => handleAddButtonClick(popupAddElelement));
+buttonEditElement.addEventListener('click', () => handleEditButtonClick());
+buttonAddElement.addEventListener('click', () => handleAddButtonClick());
+buttonEditAvatarElement.addEventListener('click', () => handleEditAvatarButtonClick())
 
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-31',
@@ -24,7 +25,9 @@ const api = new Api({
 
 const userInfo = new UserInfo({
   nameSelector: '.profile__title',
-  aboutSelector: '.profile__subtitle'
+  aboutSelector: '.profile__subtitle',
+  avatarClass: 'profile__avatar',
+  avatarContainerSelector: '.profile__avatar-overlay',
 });
 
 function handleApiResponse(response) {
@@ -40,7 +43,10 @@ function handleApiError(err) {
 
 api.getUserInfo()
   .then(handleApiResponse)
-  .then(result => userInfo.setUserInfo(result))
+  .then(userData => {
+    userInfo.setUserInfo(userData)
+    userInfo.renderUserAvatar(userData)
+  })
   .catch(handleApiError);
 
 const cardsList = new Section({
@@ -66,6 +72,9 @@ validationOfFormAdd.enableValidation();
 const validationOfFormProfile = new FormValidator(data, formProfile);
 validationOfFormProfile.enableValidation();
 
+const validationOfFormAvatar = new FormValidator(data, formEditAvatar);
+validationOfFormAvatar.enableValidation();
+
 const popupAdd = new PopupWithForm({
   popupSelector: popupAddSelector,
   handleFormSubmit: (cardContent) => {
@@ -86,14 +95,30 @@ const popupEdit = new PopupWithForm({
   handleFormSubmit: (userData) => {
     api.editUserInfo(userData)
       .then(handleApiResponse)
-      .then(result => {
-        userInfo.setUserInfo(result);
+      .then(userInfoDetails => {
+        userInfo.setUserInfo(userInfoDetails);
         popupEdit.close();
       })
       .catch(handleApiError);
   }});
 
 popupEdit.setEventListeners();
+
+const popupEditAvatar = new PopupWithForm({
+  popupSelector: popupEditAvatarSelector,
+  handleFormSubmit: (avatarLink) => {
+    api.editUserAvatar(avatarLink)
+      .then(handleApiResponse)
+      .then(userData => {
+        userInfo.removeAvatar();
+        userInfo.renderUserAvatar(userData)
+        popupEditAvatar.close();
+      })
+      .catch(handleApiError);
+  }
+})
+
+popupEditAvatar.setEventListeners();
 
 const popupImage = new PopupWithImage(popupPhotoSelector);
 popupImage.setEventListeners();
@@ -133,11 +158,18 @@ function handleAddButtonClick() {
   window.setTimeout(() => inputPlace.focus(), 300);
 }
 
+function handleEditAvatarButtonClick() {
+  validationOfFormAvatar.resetValidation();
+
+  popupEditAvatar.open();
+  window.setTimeout(() => inputAvatarUrl.focus(), 300);
+}
+
 function createCardElement(cardContent) {
   const card = new Card({
     cardContent: cardContent,
     templateSelector: '#place-template',
-    userId: userId,
+    userId: userInfo.getUserId(),
     handleCardClick: (name, link) => {
       popupImage.open(name, link);
     },
