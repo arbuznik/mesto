@@ -12,7 +12,7 @@ export default class PopupWithConfirmation extends Popup {
     super.setEventListeners();
 
     this._confirmationButton.addEventListener('click', () => {
-      this._setConfirmationButtonLoadingState();
+      this.toggleRenderLoading('Удаление...');
       this._handleConfirmation(this._cardId)
     });
   }
@@ -21,11 +21,7 @@ export default class PopupWithConfirmation extends Popup {
     this._cardId = cardId;
   }
 
-  _setConfirmationButtonLoadingState() {
-    this._confirmationButton.textContent = 'Удаление...';
-  }
-
-  setConfirmationButtonNormalState() {
-    this._confirmationButton.textContent = 'Да';
+  toggleRenderLoading(buttonText = 'Да') {
+    this._confirmationButton.textContent = buttonText;
   }
 }

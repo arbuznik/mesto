@@ -25,7 +25,7 @@ export default class PopupWithForm extends Popup {
     super.setEventListeners();
 
     this._form.addEventListener('submit', () => {
-      this.setSubmitButtonLoadingState();
+      this.toggleRenderLoading('Сохранение...');
       const inputValues = this._getInputValues();
       this._handleFormSubmit(inputValues);
     });
@@ -36,11 +36,7 @@ export default class PopupWithForm extends Popup {
     super.close();
   }
 
-  setSubmitButtonLoadingState() {
-    this._submitButton.textContent = 'Сохранение...';
-  }
-
-  setSubmitButtonNormalState() {
-    this._submitButton.textContent = 'Сохранить';
+  toggleRenderLoading(buttonText = 'Сохранить') {
+    this._submitButton.textContent = buttonText;
   }
 }

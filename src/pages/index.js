@@ -26,44 +26,29 @@ const api = new Api({
 const userInfo = new UserInfo({
   nameSelector: '.profile__title',
   aboutSelector: '.profile__subtitle',
-  avatarClass: 'profile__avatar',
+  avatarSelector: '.profile__avatar',
   avatarContainerSelector: '.profile__avatar-overlay',
 });
 
-function handleApiResponse(response) {
-  if (response.ok) {
-    return response.json();
-  }
-  return Promise.reject(`Ошибка: ${res.status}`);
-}
-
-function handleApiError(err) {
-  console.log(err);
-}
-
 api.getUserInfo()
-  .then(handleApiResponse)
   .then(userData => {
     userInfo.setUserInfo(userData)
-    userInfo.renderUserAvatar(userData)
   })
-  .catch(handleApiError);
+  .catch(api.handleApiError);
 
 const cardsList = new Section({
   renderer: (cardContent) => {
-    const cardElement = createCardElement(cardContent);
-    cardsList.addItem(cardElement);
+    return createCardElement(cardContent);
   },
   containerSelector: cardsContainerSelector
 });
 
 api.getInitialCards()
-  .then(handleApiResponse)
   .then(result => renderInitialCards(result))
-  .catch(handleApiError);
+  .catch(api.handleApiError);
 
 function renderInitialCards(cardsContent) {
-  cardsList.renderItems(cardsContent);
+  cardsList.renderCards(cardsContent);
 }
 
 const validationOfFormAdd = new FormValidator(data, formAdd);
@@ -79,14 +64,12 @@ const popupAdd = new PopupWithForm({
   popupSelector: popupAddSelector,
   handleFormSubmit: (cardContent) => {
     api.addNewCard(cardContent)
-      .then(handleApiResponse)
-      .then(result => {
-        const cardElement = createCardElement(result);
-        cardsList.addItem(cardElement);
-        popupAdd.setSubmitButtonNormalState();
+      .then(cardContent => {
+        cardsList.renderCard(cardContent);
+        popupAdd.toggleRenderLoading();
         popupAdd.close();
       })
-      .catch(handleApiError);
+      .catch(api.handleApiError);
   }});
 
 popupAdd.setEventListeners();
@@ -95,13 +78,12 @@ const popupEdit = new PopupWithForm({
   popupSelector: popupEditSelector,
   handleFormSubmit: (userData) => {
     api.editUserInfo(userData)
-      .then(handleApiResponse)
       .then(userInfoDetails => {
         userInfo.setUserInfo(userInfoDetails);
-        popupEdit.setSubmitButtonNormalState();
+        popupEdit.toggleRenderLoading();
         popupEdit.close();
       })
-      .catch(handleApiError);
+      .catch(api.handleApiError);
   }});
 
 popupEdit.setEventListeners();
@@ -110,14 +92,12 @@ const popupEditAvatar = new PopupWithForm({
   popupSelector: popupEditAvatarSelector,
   handleFormSubmit: (avatarLink) => {
     api.editUserAvatar(avatarLink)
-      .then(handleApiResponse)
       .then(userData => {
-        userInfo.removeAvatar();
-        userInfo.renderUserAvatar(userData)
-        popupEditAvatar.setSubmitButtonNormalState();
+        userInfo.setUserInfo(userData)
+        popupEditAvatar.toggleRenderLoading();
         popupEditAvatar.close();
       })
-      .catch(handleApiError);
+      .catch(api.handleApiError);
   }
 })
 
@@ -130,13 +110,12 @@ const popupDeleteConfirmation = new PopupWithConfirmation({
   popupSelector: popupConfirmationSelector,
   handleConfirmation: (cardId) => {
     api.deleteCard(cardId)
-      .then(handleApiResponse)
       .then(() => {
         document.getElementById(cardId).remove();
-        popupDeleteConfirmation.setConfirmationButtonNormalState();
+        popupDeleteConfirmation.toggleRenderLoading();
         popupDeleteConfirmation.close();
       })
-      .catch(handleApiError);
+      .catch(api.handleApiError);
   }});
 
 popupDeleteConfirmation.setEventListeners();
@@ -184,18 +163,16 @@ function createCardElement(cardContent) {
     handleLikeClick: (cardId, isLiked) => {
       if (isLiked) {
         api.removeCardLike(cardId)
-          .then(handleApiResponse)
           .then(cardContent => {
             card.updateLikes(cardContent.likes)
           })
-          .catch(handleApiError);
+          .catch(api.handleApiError);
       } else {
         api.addCardLike(cardId)
-          .then(handleApiResponse)
           .then(cardContent => {
             card.updateLikes(cardContent.likes)
       })
-          .catch(handleApiError);
+          .catch(api.handleApiError);
       }
     }});
 

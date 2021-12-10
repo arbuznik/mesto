@@ -8,12 +8,14 @@ export default class Api {
     return fetch(this._url + '/users/me', {
       headers: this._headers
     })
+      .then(this._handleApiResponse)
   }
 
   getInitialCards() {
     return fetch(this._url + '/cards', {
       headers: this._headers
     })
+      .then(this._handleApiResponse)
   }
 
   editUserInfo(userInfo) {
@@ -22,6 +24,7 @@ export default class Api {
       headers: this._headers,
       body: JSON.stringify(userInfo)
     })
+      .then(this._handleApiResponse)
   }
 
   addNewCard(cardContent) {
@@ -30,6 +33,7 @@ export default class Api {
       headers: this._headers,
       body: JSON.stringify(cardContent)
     })
+      .then(this._handleApiResponse)
   }
 
   deleteCard(cardId) {
@@ -37,6 +41,7 @@ export default class Api {
       method: 'DELETE',
       headers: this._headers
     })
+      .then(this._handleApiResponse)
   }
 
   addCardLike(cardId) {
@@ -44,6 +49,7 @@ export default class Api {
       method: 'PUT',
       headers: this._headers
     })
+      .then(this._handleApiResponse)
   }
 
   removeCardLike(cardId) {
@@ -51,6 +57,7 @@ export default class Api {
       method: 'DELETE',
       headers: this._headers
     })
+      .then(this._handleApiResponse)
   }
 
   editUserAvatar(avatarLink) {
@@ -59,5 +66,17 @@ export default class Api {
       headers: this._headers,
       body: JSON.stringify(avatarLink)
     })
+      .then(this._handleApiResponse)
+  }
+
+  _handleApiResponse(response) {
+    if (response.ok) {
+      return response.json();
+    }
+    return Promise.reject(`Ошибка: ${response.status}`);
+  }
+
+  handleApiError(err) {
+    console.log(err);
   }
 }
