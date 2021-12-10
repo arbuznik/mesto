@@ -13,7 +13,7 @@ import { cardsContainerSelector, popupAddSelector, popupEditSelector, popupPhoto
 
 buttonEditElement.addEventListener('click', () => handleEditButtonClick());
 buttonAddElement.addEventListener('click', () => handleAddButtonClick());
-buttonEditAvatarElement.addEventListener('click', () => handleEditAvatarButtonClick())
+buttonEditAvatarElement.addEventListener('click', () => handleEditAvatarButtonClick());
 
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-31',
@@ -30,12 +30,6 @@ const userInfo = new UserInfo({
   avatarContainerSelector: '.profile__avatar-overlay',
 });
 
-api.getUserInfo()
-  .then(userData => {
-    userInfo.setUserInfo(userData)
-  })
-  .catch(api.handleApiError);
-
 const cardsList = new Section({
   renderer: (cardContent) => {
     return createCardElement(cardContent);
@@ -43,13 +37,12 @@ const cardsList = new Section({
   containerSelector: cardsContainerSelector
 });
 
-api.getInitialCards()
-  .then(result => renderInitialCards(result))
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([userData, cardsData]) => {
+    userInfo.setUserInfo(userData);
+    cardsList.renderCards(cardsData);
+  })
   .catch(api.handleApiError);
-
-function renderInitialCards(cardsContent) {
-  cardsList.renderCards(cardsContent);
-}
 
 const validationOfFormAdd = new FormValidator(data, formAdd);
 validationOfFormAdd.enableValidation();
@@ -66,10 +59,12 @@ const popupAdd = new PopupWithForm({
     api.addNewCard(cardContent)
       .then(cardContent => {
         cardsList.renderCard(cardContent);
-        popupAdd.toggleRenderLoading();
         popupAdd.close();
       })
-      .catch(api.handleApiError);
+      .finally(() => {
+        popupAdd.toggleRenderLoading('Создать');
+      })
+      .catch(api.handleApiError)
   }});
 
 popupAdd.setEventListeners();
@@ -80,10 +75,12 @@ const popupEdit = new PopupWithForm({
     api.editUserInfo(userData)
       .then(userInfoDetails => {
         userInfo.setUserInfo(userInfoDetails);
-        popupEdit.toggleRenderLoading();
         popupEdit.close();
       })
-      .catch(api.handleApiError);
+      .finally(() => {
+        popupEdit.toggleRenderLoading();
+      })
+      .catch(api.handleApiError)
   }});
 
 popupEdit.setEventListeners();
@@ -94,10 +91,12 @@ const popupEditAvatar = new PopupWithForm({
     api.editUserAvatar(avatarLink)
       .then(userData => {
         userInfo.setUserInfo(userData)
-        popupEditAvatar.toggleRenderLoading();
         popupEditAvatar.close();
       })
-      .catch(api.handleApiError);
+      .finally(() => {
+        popupEditAvatar.toggleRenderLoading();
+      })
+      .catch(api.handleApiError)
   }
 })
 
@@ -112,10 +111,12 @@ const popupDeleteConfirmation = new PopupWithConfirmation({
     api.deleteCard(cardId)
       .then(() => {
         document.getElementById(cardId).remove();
-        popupDeleteConfirmation.toggleRenderLoading();
         popupDeleteConfirmation.close();
       })
-      .catch(api.handleApiError);
+      .finally(() => {
+        popupDeleteConfirmation.toggleRenderLoading();
+      })
+      .catch(api.handleApiError)
   }});
 
 popupDeleteConfirmation.setEventListeners();
@@ -157,7 +158,7 @@ function createCardElement(cardContent) {
       popupImage.open(name, link);
     },
     handleDeleteClick: (cardId) => {
-      popupDeleteConfirmation.open()
+      popupDeleteConfirmation.open();
       popupDeleteConfirmation.setCardId(cardId);
     },
     handleLikeClick: (cardId, isLiked) => {
