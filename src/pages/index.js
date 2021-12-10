@@ -83,6 +83,7 @@ const popupAdd = new PopupWithForm({
       .then(result => {
         const cardElement = createCardElement(result);
         cardsList.addItem(cardElement);
+        popupAdd.setSubmitButtonNormalState();
         popupAdd.close();
       })
       .catch(handleApiError);
@@ -97,6 +98,7 @@ const popupEdit = new PopupWithForm({
       .then(handleApiResponse)
       .then(userInfoDetails => {
         userInfo.setUserInfo(userInfoDetails);
+        popupEdit.setSubmitButtonNormalState();
         popupEdit.close();
       })
       .catch(handleApiError);
@@ -112,6 +114,7 @@ const popupEditAvatar = new PopupWithForm({
       .then(userData => {
         userInfo.removeAvatar();
         userInfo.renderUserAvatar(userData)
+        popupEditAvatar.setSubmitButtonNormalState();
         popupEditAvatar.close();
       })
       .catch(handleApiError);
@@ -130,6 +133,7 @@ const popupDeleteConfirmation = new PopupWithConfirmation({
       .then(handleApiResponse)
       .then(() => {
         document.getElementById(cardId).remove();
+        popupDeleteConfirmation.setConfirmationButtonNormalState();
         popupDeleteConfirmation.close();
       })
       .catch(handleApiError);

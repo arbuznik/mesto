@@ -12,11 +12,20 @@ export default class PopupWithConfirmation extends Popup {
     super.setEventListeners();
 
     this._confirmationButton.addEventListener('click', () => {
+      this._setConfirmationButtonLoadingState();
       this._handleConfirmation(this._cardId)
     });
   }
   
   setCardId(cardId) {
     this._cardId = cardId;
+  }
+
+  _setConfirmationButtonLoadingState() {
+    this._confirmationButton.textContent = 'Удаление...';
+  }
+
+  setConfirmationButtonNormalState() {
+    this._confirmationButton.textContent = 'Да';
   }
 }
